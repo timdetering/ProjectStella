@@ -26,6 +26,8 @@ namespace ProjectStella
         GameManager gameManager;
 
         Texture2D background;
+
+        SpriteFont font;
         #endregion
 
         #region Initialize
@@ -39,12 +41,12 @@ namespace ProjectStella
 
         public void LoadContent()
         {
-            gameManager.LoadFiles(content);    
+            font = content.Load<SpriteFont>("Fonts/gameFont");
         }
 
         public void UnloadContent()
         {
-            gameManager.UnloadFiles();
+            
         }
 
         #endregion
@@ -53,8 +55,6 @@ namespace ProjectStella
 
         public void Update(GameTime gameTime)
         {
-            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            gameManager.Update(elapsedTime);
            
         }
 
@@ -64,11 +64,12 @@ namespace ProjectStella
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            // draw the 3d game scene
-            gameManager.Draw3D(screenManager.GraphicsDevice);
+            spriteBatch.Begin();
 
-            // draw 2D game gui
-            gameManager.Draw2D(screenManager.fontManager);
+            spriteBatch.DrawString(font, GameOptions.Language, Vector2.Zero, Color.White);
+            spriteBatch.DrawString(font, GameOptions.DifficultyMod.ToString(), new Vector2(0, 35), Color.White);
+
+            spriteBatch.End();
         }
 
         #endregion

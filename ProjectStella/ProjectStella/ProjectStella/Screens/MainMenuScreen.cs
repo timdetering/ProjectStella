@@ -1,5 +1,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
+using System.Globalization;
+using System.Threading;
 #endregion
 
 namespace ProjectStella
@@ -9,19 +11,26 @@ namespace ProjectStella
     /// </summary>
     class MainMenuScreen : MenuScreen
     {
-        #region Initialization
+        #region Fields
 
+        string comingFrom = "MainMenu";
+
+        #endregion
+
+        #region Initialization
 
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
         public MainMenuScreen()
-            : base("Inter Stellarum")
+            : base("Inter Stellarum", "MainMenu")
         {
+            Strings.Culture = CultureInfo.CurrentUICulture;
+
             // Create our menu entries.
-            MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
-            MenuEntry optionsMenuEntry = new MenuEntry("Options");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+            MenuEntry playGameMenuEntry = new MenuEntry(Strings.PlayGame);
+            MenuEntry optionsMenuEntry = new MenuEntry(Strings.Options);
+            MenuEntry exitMenuEntry = new MenuEntry(Strings.Exit);
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
@@ -34,7 +43,6 @@ namespace ProjectStella
             MenuEntries.Add(exitMenuEntry);
         }
 
-
         #endregion
 
         #region Handle Input
@@ -45,8 +53,7 @@ namespace ProjectStella
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
-                               new GameplayScreen());
+            BlankTransitionScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new ShipSelectionScreen(ScreenManager));
         }
 
 
@@ -55,9 +62,7 @@ namespace ProjectStella
         /// </summary>
         void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
-
-            
+            BlankTransitionScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new OptionsMenuScreen(comingFrom));
         }
 
 

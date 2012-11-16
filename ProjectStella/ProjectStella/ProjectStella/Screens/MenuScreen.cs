@@ -23,6 +23,8 @@ namespace ProjectStella
         List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
         string menuTitle;
+        string menuType;
+        float transitionOffset;
 
         // Loads the sounds that will be on the menus
         SoundEffect uiClick;
@@ -51,9 +53,10 @@ namespace ProjectStella
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MenuScreen(string menuTitle)
+        public MenuScreen(string menuTitle, string menuType)
         {
             this.menuTitle = menuTitle;
+            this.menuType = menuType;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
@@ -164,8 +167,44 @@ namespace ProjectStella
             // Make the menu slide into place during transitions, using a
             // power curve to make things look more interesting (this makes
             // the movement slow down as it nears the end).
-            float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
+            transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
+            switch (menuType)
+            {
+                case "MainMenu" :
+                    UpdateMainMenuEntryLocations();
+                    break;
+                case "Normal" :
+                    UpdateNormalEntryLocations();
+                    break;
+            }
+
+        }
+
+        void UpdateMainMenuEntryLocations()
+        {
+            Vector2 position = new Vector2(75f, 550f);
+
+            // update each menu entry's location in turn
+            for (int i = 0; i < menuEntries.Count; i++)
+            {
+                MenuEntry menuEntry = menuEntries[i];
+
+                if (ScreenState == ScreenState.TransitionOn)
+                    position.X -= transitionOffset * 256;
+                else
+                    position.X += transitionOffset * 512;
+
+                // set the entry's position
+                menuEntry.Position = position;
+
+                // move down for the next entry the size of this entry
+                position.Y += menuEntry.GetHeight(this);
+            }
+        }
+
+        void UpdateNormalEntryLocations()
+        {
             // start at Y = 175; each X value is generated per entry
             Vector2 position = new Vector2(0f, 175f);
 

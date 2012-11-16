@@ -1,5 +1,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
+using System.Globalization;
+using System.Threading;
 #endregion
 
 namespace ProjectStella
@@ -13,22 +15,35 @@ namespace ProjectStella
     {
         #region Fields
 
-        MenuEntry ungulateMenuEntry;
+        string comingFrom;
+
+        // Creates all of the menu entries that are on the options screen
+        MenuEntry difficultyMenuEntry;
         MenuEntry languageMenuEntry;
+        MenuEntry invertYMenuEntry;
+        MenuEntry buttonLayoutMenuEntry;
+        MenuEntry thumbstickLayoutMenuEntry;
+        MenuEntry backMenuEntry;
+
+
         MenuEntry frobnicateMenuEntry;
         MenuEntry elfMenuEntry;
 
-        enum Ungulate
+        enum Difficulty
         {
-            BactrianCamel,
-            Dromedary,
-            Llama,
+            DebugEntry,
+            Easy,
+            Normal,
+            Hard,
         }
 
-        static Ungulate currentUngulate = Ungulate.Dromedary;
+        static Difficulty currentDifficulty = Difficulty.Normal;
 
-        static string[] languages = { "C#", "French", "Deoxyribonucleic acid" };
+        static string[] languages = { "English", "French" };
         static int currentLanguage = 0;
+
+        static string[] invertY = { "No", "Yes" };
+        static int currentInvertY = 0;
 
         static bool frobnicate = true;
 
@@ -42,32 +57,43 @@ namespace ProjectStella
         /// <summary>
         /// Constructor.
         /// </summary>
-        public OptionsMenuScreen()
-            : base("Options")
+        public OptionsMenuScreen(string comingFrom)
+            : base("Options","Normal")
         {
+            this.comingFrom = comingFrom;
+
             // Create our menu entries.
-            ungulateMenuEntry = new MenuEntry(string.Empty);
+            difficultyMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
+            invertYMenuEntry = new MenuEntry(string.Empty);
+            buttonLayoutMenuEntry = new MenuEntry("Button Layout");
+            thumbstickLayoutMenuEntry = new MenuEntry("Thumbstick Layout");
+            backMenuEntry = new MenuEntry(string.Empty);
+
             frobnicateMenuEntry = new MenuEntry(string.Empty);
             elfMenuEntry = new MenuEntry(string.Empty);
 
             SetMenuEntryText();
 
-            MenuEntry back = new MenuEntry("Back");
-
             // Hook up menu event handlers.
-            ungulateMenuEntry.Selected += UngulateMenuEntrySelected;
+            difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
-            frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
-            elfMenuEntry.Selected += ElfMenuEntrySelected;
-            back.Selected += OnCancel;
+            invertYMenuEntry.Selected += InvertYMenuEntrySelected;
+            buttonLayoutMenuEntry.Selected += ButtonLayoutMenuEntrySelected;
+
+            //frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
+            //elfMenuEntry.Selected += ElfMenuEntrySelected;
+            backMenuEntry.Selected += OnCancel;
             
             // Add entries to the menu.
-            MenuEntries.Add(ungulateMenuEntry);
             MenuEntries.Add(languageMenuEntry);
-            MenuEntries.Add(frobnicateMenuEntry);
-            MenuEntries.Add(elfMenuEntry);
-            MenuEntries.Add(back);
+            MenuEntries.Add(difficultyMenuEntry);
+            MenuEntries.Add(invertYMenuEntry);
+            MenuEntries.Add(buttonLayoutMenuEntry);
+            MenuEntries.Add(thumbstickLayoutMenuEntry);
+            //MenuEntries.Add(frobnicateMenuEntry);
+            //MenuEntries.Add(elfMenuEntry);
+            MenuEntries.Add(backMenuEntry);
         }
 
 
@@ -76,12 +102,38 @@ namespace ProjectStella
         /// </summary>
         void SetMenuEntryText()
         {
-            ungulateMenuEntry.Text = "Preferred ungulate: " + currentUngulate;
+            GameOptions.SetDifficulty((int)currentDifficulty);
+
+            if (GameOptions.Language == "French")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr");
+            else if (GameOptions.Language == "English")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+
+
+            Strings.Culture = CultureInfo.CurrentUICulture;
+
             languageMenuEntry.Text = "Language: " + languages[currentLanguage];
-            frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
-            elfMenuEntry.Text = "elf: " + elf;
+            difficultyMenuEntry.Text = "Difficulty: " + currentDifficulty;
+            invertYMenuEntry.Text = "Invert Y: " + currentInvertY;
+            backMenuEntry.Text = Strings.Back;
+
+
+            //frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
+            //elfMenuEntry.Text = "elf: " + elf;
         }
 
+        /// <summary>
+        /// Updates the options menu to the current language.
+        /// </summary>
+        void UpdateLanguage()
+        {
+            GameOptions.SetLanguage(languages[currentLanguage]);
+
+            if (GameOptions.Language == "French")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr");
+            else if (GameOptions.Language == "English")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
+        }
 
         #endregion
 
@@ -89,18 +141,17 @@ namespace ProjectStella
 
 
         /// <summary>
-        /// Event handler for when the Ungulate menu entry is selected.
+        /// Event handler for when the Difficulty menu entry is selected.
         /// </summary>
-        void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void DifficultyMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            currentUngulate++;
+            currentDifficulty++;
 
-            if (currentUngulate > Ungulate.Llama)
-                currentUngulate = 0;
+            if (currentDifficulty > Difficulty.Hard)
+                currentDifficulty = 0;
 
             SetMenuEntryText();
         }
-
 
         /// <summary>
         /// Event handler for when the Language menu entry is selected.
@@ -109,9 +160,28 @@ namespace ProjectStella
         {
             currentLanguage = (currentLanguage + 1) % languages.Length;
 
+            UpdateLanguage();
+
             SetMenuEntryText();
         }
 
+        /// <summary>
+        /// Event handler for when the InvertY menu entry is selected.
+        /// </summary>
+        void InvertYMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            currentInvertY = (currentInvertY + 1) % invertY.Length;
+
+            SetMenuEntryText();
+        }
+
+        /// <summary>
+        /// Event handler for when the InvertY menu entry is selected.
+        /// </summary>
+        void ButtonLayoutMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            ScreenManager.AddScreen(new ButtonLayoutScreen(), e.PlayerIndex);
+        }
 
         /// <summary>
         /// Event handler for when the Frobnicate menu entry is selected.
@@ -123,7 +193,6 @@ namespace ProjectStella
             SetMenuEntryText();
         }
 
-
         /// <summary>
         /// Event handler for when the Elf menu entry is selected.
         /// </summary>
@@ -134,6 +203,38 @@ namespace ProjectStella
             SetMenuEntryText();
         }
 
+        /// <summary>
+        /// Event handler for when the Back menu entry is selected.
+        /// </summary>
+        void BackMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            if (comingFrom == "MainMenu")
+            {
+                BlankTransitionScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new MainMenuScreen());
+            }
+            else if (comingFrom == "PauseMenu")
+                OnCancel(e.PlayerIndex);
+        }
+
+        /// <summary>
+        /// Overrides the OnCancel method so that we don't get stuck
+        /// in the BlankTransitionScreen.
+        /// </summary>
+        /// <param name="playerIndex"></param>
+        protected override void OnCancel(PlayerIndex playerIndex)
+        {
+            if (comingFrom == "MainMenu")
+            {
+                BlankTransitionScreen.Load(ScreenManager, false, playerIndex, new BackgroundScreen(), new MainMenuScreen());
+            }
+            else if (comingFrom == "PauseMenu")
+            {
+                PauseMenuScreen.SetMenuText();
+                base.OnCancel(playerIndex);
+
+            }
+        }
+        
 
         #endregion
     }

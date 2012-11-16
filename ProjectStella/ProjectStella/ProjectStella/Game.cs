@@ -26,7 +26,7 @@ namespace ProjectStella
         WaveBank waveBank;
         SoundBank soundBank;
 
-        bool renderVsync;
+        bool renderVsync = true;
 
 
         // By preloading any assets used by UI rendering, we avoid framerate glitches
@@ -58,6 +58,7 @@ namespace ProjectStella
 
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
+            graphics.IsFullScreen = true;
 
             IsFixedTimeStep = renderVsync;
             graphics.SynchronizeWithVerticalRetrace = renderVsync;

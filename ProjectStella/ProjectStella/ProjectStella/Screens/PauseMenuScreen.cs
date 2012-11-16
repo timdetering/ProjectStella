@@ -1,5 +1,7 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
+using System.Globalization;
+using System.Threading;
 #endregion
 
 namespace ProjectStella
@@ -10,6 +12,16 @@ namespace ProjectStella
     /// </summary>
     class PauseMenuScreen : MenuScreen
     {
+        #region Fields
+
+        string comingFrom = "PauseMenu";
+
+        static MenuEntry resumeGameMenuEntry;
+        static MenuEntry optionsMenuEntry;
+        static MenuEntry quitGameMenuEntry;
+
+        #endregion
+
         #region Initialization
 
 
@@ -17,19 +29,45 @@ namespace ProjectStella
         /// Constructor.
         /// </summary>
         public PauseMenuScreen()
-            : base("Paused")
+            : base("Paused", "Normal")
         {
             // Create our menu entries.
-            MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
-            MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
+            resumeGameMenuEntry = new MenuEntry(Strings.Resume);
+            optionsMenuEntry = new MenuEntry(Strings.Options);
+            quitGameMenuEntry = new MenuEntry(Strings.Quit);
+
+            // Sets the menu 
+            SetMenuText();
             
             // Hook up menu event handlers.
             resumeGameMenuEntry.Selected += OnCancel;
+            optionsMenuEntry.Selected += OptionsMenuEntrySelected;
             quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
 
             // Add entries to the menu.
             MenuEntries.Add(resumeGameMenuEntry);
+            MenuEntries.Add(optionsMenuEntry);
             MenuEntries.Add(quitGameMenuEntry);
+        }
+
+        public static void SetMenuText()
+        {
+            UpdateLanguage();
+
+            resumeGameMenuEntry.Text = Strings.Resume;
+            optionsMenuEntry.Text = Strings.Options;
+            quitGameMenuEntry.Text = Strings.Quit;
+        }
+
+        /// <summary>
+        /// Updates the Pause menu's menu entries to the proper language.
+        /// </summary>
+        public static void UpdateLanguage()
+        {
+            if (GameOptions.Language == "French")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("fr");
+            else if (GameOptions.Language == "English")
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en");
         }
 
 
@@ -37,6 +75,13 @@ namespace ProjectStella
 
         #region Handle Input
 
+        /// <summary>
+        /// Event handler for when the Options menu entry is selected.
+        /// </summary>
+        void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            ScreenManager.AddScreen(new OptionsMenuScreen(comingFrom), e.PlayerIndex);
+        }
 
         /// <summary>
         /// Event handler for when the Quit Game menu entry is selected.
@@ -52,7 +97,6 @@ namespace ProjectStella
             ScreenManager.AddScreen(confirmQuitMessageBox, ControllingPlayer);
         }
 
-
         /// <summary>
         /// Event handler for when the user selects ok on the "are you sure
         /// you want to quit" message box. This uses the loading screen to
@@ -63,7 +107,6 @@ namespace ProjectStella
             LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
                                                            new MainMenuScreen());
         }
-
 
         #endregion
     }

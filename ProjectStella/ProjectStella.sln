@@ -5,9 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectStella", "ProjectSte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectStellaContent", "ProjectStella\ProjectStellaContent\ProjectStellaContent.contentproj", "{419DB0E6-688B-46A0-A638-65F7FBC7867B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxColliderWindows", "..\AppHub\ShipGame_4_0\BoxCollider\BoxColliderWindows.csproj", "{9B875652-0591-4CDA-8B98-BAD32767CCC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NormalMappingModelProcessor", "NormalMappingModelProcessor\NormalMappingModelProcessor.csproj", "{0D8E4373-133B-413A-9CB7-46BB598E8132}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NormalMappingModelProcessor", "..\AppHub\ShipGame_4_0\NormalMappingModelProcessor\NormalMappingModelProcessor.csproj", "{0D8E4373-133B-413A-9CB7-46BB598E8132}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoxColliderWindows", "BoxCollider\BoxColliderWindows.csproj", "{9B875652-0591-4CDA-8B98-BAD32767CCC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +21,14 @@ Global
 		{8246D122-7F19-4A0C-BB3D-D3CA3070BC86}.Release|x86.Build.0 = Release|x86
 		{419DB0E6-688B-46A0-A638-65F7FBC7867B}.Debug|x86.ActiveCfg = Debug|x86
 		{419DB0E6-688B-46A0-A638-65F7FBC7867B}.Release|x86.ActiveCfg = Release|x86
-		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Debug|x86.ActiveCfg = Debug|x86
-		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Debug|x86.Build.0 = Debug|x86
-		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Release|x86.ActiveCfg = Release|x86
-		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Release|x86.Build.0 = Release|x86
 		{0D8E4373-133B-413A-9CB7-46BB598E8132}.Debug|x86.ActiveCfg = Debug|x86
 		{0D8E4373-133B-413A-9CB7-46BB598E8132}.Debug|x86.Build.0 = Debug|x86
 		{0D8E4373-133B-413A-9CB7-46BB598E8132}.Release|x86.ActiveCfg = Release|x86
 		{0D8E4373-133B-413A-9CB7-46BB598E8132}.Release|x86.Build.0 = Release|x86
+		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Debug|x86.ActiveCfg = Debug|x86
+		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Debug|x86.Build.0 = Debug|x86
+		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Release|x86.ActiveCfg = Release|x86
+		{9B875652-0591-4CDA-8B98-BAD32767CCC4}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

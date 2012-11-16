@@ -140,9 +140,9 @@ namespace ProjectStella
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;
             
-            float pulsate = (float)Math.Sin(time * 6) + 1;
+            //float pulsate = (float)Math.Sin(time * 6) + 1;
 
-            float scale = 1 + pulsate * 0.05f * selectionFade;
+            //float scale = 1 + pulsate * 0.05f * selectionFade;
 
             // Modify the alpha to fade text out during transitions.
             color *= screen.TransitionAlpha;
@@ -153,6 +153,8 @@ namespace ProjectStella
             SpriteFont font = screenManager.Font;
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
+
+            float scale = 1;
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);

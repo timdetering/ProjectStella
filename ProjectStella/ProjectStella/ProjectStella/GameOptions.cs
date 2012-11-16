@@ -122,5 +122,20 @@ namespace ProjectStella
         public static float MovementRotationForce = 5.0f;
         // damping force used to stop rotation
         public static float MovementRotationForceDamping = 3.0f;
+
+        public static string Language = "English";
+        public static int DifficultyMod = 1;
+
+        // Changes the language for the game
+        public static void SetLanguage(string language)
+        {
+            Language = language;
+        }
+
+        // Changes the difficulty modifer for the game
+        public static void SetDifficulty(int difficultyModifier)
+        {
+            DifficultyMod = difficultyModifier;
+        }
     }
 }

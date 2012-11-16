@@ -1,10 +1,7 @@
 #region Using Statements
 using System;
-using System.Threading;
-using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Net;
 #endregion
 
 namespace ProjectStella
@@ -23,24 +20,14 @@ namespace ProjectStella
     ///   next screen, which may take a long time to load its data. The loading
     ///   screen will be the only thing displayed while this load is taking place.
     /// </summary>
-    class LoadingScreen : GameScreen
+    class BlankTransitionScreen : GameScreen
     {
         #region Fields
 
         bool loadingIsSlow;
         bool otherScreensAreGone;
 
-        string message = "Loading";
-
         GameScreen[] screensToLoad;
-
-        Thread backgroundThread;
-        EventWaitHandle backgroundThreadExit;
-
-        GraphicsDevice graphicsDevice;
-
-        GameTime loadStartTime;
-        TimeSpan loadAnimationTimer;
 
         #endregion
 
@@ -51,21 +38,13 @@ namespace ProjectStella
         /// The constructor is private: loading screens should
         /// be activated via the static Load method instead.
         /// </summary>
-        private LoadingScreen(ScreenManager screenManager, bool loadingIsSlow,
+        private BlankTransitionScreen(ScreenManager screenManager, bool loadingIsSlow,
                               GameScreen[] screensToLoad)
         {
             this.loadingIsSlow = loadingIsSlow;
             this.screensToLoad = screensToLoad;
 
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
-
-            if (loadingIsSlow)
-            {
-                backgroundThread = new Thread(BackgroundWorkerThread);
-                backgroundThreadExit = new ManualResetEvent(false);
-
-                graphicsDevice = screenManager.GraphicsDevice;
-            }
         }
 
 
@@ -81,11 +60,11 @@ namespace ProjectStella
                 screen.ExitScreen();
 
             // Create and activate the loading screen.
-            LoadingScreen loadingScreen = new LoadingScreen(screenManager,
+            BlankTransitionScreen blankTransitionScreen = new BlankTransitionScreen(screenManager,
                                                             loadingIsSlow,
                                                             screensToLoad);
 
-            screenManager.AddScreen(loadingScreen, controllingPlayer);
+            screenManager.AddScreen(blankTransitionScreen, controllingPlayer);
         }
 
 
@@ -106,13 +85,6 @@ namespace ProjectStella
             // off, it is time to actually perform the load.
             if (otherScreensAreGone)
             {
-                if (backgroundThread != null)
-                {
-                    loadStartTime = gameTime;
-                    backgroundThread.Start();
-                }
-
-                // Perform the load operation.
                 ScreenManager.RemoveScreen(this);
 
                 foreach (GameScreen screen in screensToLoad)
@@ -120,16 +92,7 @@ namespace ProjectStella
                     if (screen != null)
                     {
                         ScreenManager.AddScreen(screen, ControllingPlayer);
-
-
                     }
-                }
-
-                // Signal the background thread to exit, then wait for it to do so.
-                if (backgroundThread != null)
-                {
-                    backgroundThreadExit.Set();
-                    backgroundThread.Join();
                 }
 
                 // Once the load has finished, we use ResetElapsedTime to tell
@@ -138,6 +101,7 @@ namespace ProjectStella
                 ScreenManager.Game.ResetElapsedTime();
             }
         }
+
 
         /// <summary>
         /// Draws the loading screen.
@@ -157,105 +121,23 @@ namespace ProjectStella
 
             // The gameplay screen takes a while to load, so we display a loading
             // message while that is going on, but the menus load very quickly, and
-            // it would look silly if we flashed this up for just a fraction of a4
+            // it would look silly if we flashed this up for just a fraction of a
             // second while returning from the game to the menus. This parameter
             // tells us how long the loading is going to take, so we know whether
             // to bother drawing the message.
             if (loadingIsSlow)
             {
                 SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-                SpriteFont font = ScreenManager.Font;
-
-                message = "Loading";
-
-                // Center the text in the viewport.
-                Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
-                Vector2 viewportSize = new Vector2(viewport.Width, viewport.Height);
-                Vector2 textSize = font.MeasureString(message);
-                Vector2 textPosition = (viewportSize - textSize) / 2;
 
                 Color color = Color.White * TransitionAlpha;
 
-                // Animate the number of dots afer "Loading" message.
-                loadAnimationTimer += gameTime.ElapsedGameTime;
-
-                int dotCount = (int)(loadAnimationTimer.TotalSeconds * 2) % 2;
-
-                message += new string('.', dotCount);
-
                 // Draw the text.
                 spriteBatch.Begin();
-                spriteBatch.DrawString(font, message, textPosition, color);
+
                 spriteBatch.End();
             }
         }
 
-        #endregion
-
-        #region Background Thread
-
-        /// <summary>
-        /// Worker thread draws the loading animation while the load is taking place
-        /// </summary>
-        void BackgroundWorkerThread()
-        {
-            long lastTime = Stopwatch.GetTimestamp();
-
-            // EventWaitHandle.WaitOne will return true if the exit signal has
-            // been triggered, or false if the timeout has expired. We use the
-            // timeout to update at regular intervals, then break out of the
-            // loop when we are signalled to exit.
-            while (!backgroundThreadExit.WaitOne(1000 / 30))
-            {
-                GameTime gameTime = GetGameTime(ref lastTime);
-
-                DrawLoadAnimation(gameTime);
-            }
-        }
-
-        /// <summary>
-        /// Works out how long it has been since the last background thread update.
-        /// </summary>
-        GameTime GetGameTime(ref long lastTime)
-        {
-            long currentTime = Stopwatch.GetTimestamp();
-            long elapsedTicks = currentTime - lastTime;
-            lastTime = currentTime;
-
-            TimeSpan elapsedTime = TimeSpan.FromTicks(elapsedTicks *
-                                                      TimeSpan.TicksPerSecond /
-                                                      Stopwatch.Frequency);
-
-            return new GameTime(loadStartTime.TotalGameTime + elapsedTime, elapsedTime);
-        }
-
-        /// <summary>
-        /// Calls directly into our Draw method from the background worker thread,
-        /// so as to update the load animation in parallel with the actual loading.
-        /// </summary>
-        void DrawLoadAnimation(GameTime gameTime)
-        {
-            if ((graphicsDevice == null) || graphicsDevice.IsDisposed)
-                return;
-
-            try
-            {
-                graphicsDevice.Clear(Color.Black);
-
-                // Draw the loading screen.
-                Draw(gameTime);
-
-                graphicsDevice.Present();
-            }
-            catch
-            {
-                // If anything went wrong (for instance the graphics device was lost
-                // or reset) we don't have any good way to recover while running on a
-                // background thread. Setting the device to null will stop us from
-                // rendering, so the main game can deal with the problem later on.
-                graphicsDevice = null;
-            }
-        }
 
         #endregion
     }
