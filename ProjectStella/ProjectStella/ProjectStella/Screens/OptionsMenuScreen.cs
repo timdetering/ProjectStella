@@ -66,8 +66,8 @@ namespace ProjectStella
             difficultyMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
             invertYMenuEntry = new MenuEntry(string.Empty);
-            buttonLayoutMenuEntry = new MenuEntry("Button Layout");
-            thumbstickLayoutMenuEntry = new MenuEntry("Thumbstick Layout");
+            buttonLayoutMenuEntry = new MenuEntry(string.Empty);
+            thumbstickLayoutMenuEntry = new MenuEntry(string.Empty);
             backMenuEntry = new MenuEntry(string.Empty);
 
             frobnicateMenuEntry = new MenuEntry(string.Empty);
@@ -80,6 +80,7 @@ namespace ProjectStella
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
             invertYMenuEntry.Selected += InvertYMenuEntrySelected;
             buttonLayoutMenuEntry.Selected += ButtonLayoutMenuEntrySelected;
+            thumbstickLayoutMenuEntry.Selected += ThumbStickLayoutMenuEntrySelected;
 
             //frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
             //elfMenuEntry.Selected += ElfMenuEntrySelected;
@@ -115,6 +116,8 @@ namespace ProjectStella
             languageMenuEntry.Text = "Language: " + languages[currentLanguage];
             difficultyMenuEntry.Text = "Difficulty: " + currentDifficulty;
             invertYMenuEntry.Text = "Invert Y: " + currentInvertY;
+            buttonLayoutMenuEntry.Text = "Button Layout";
+            thumbstickLayoutMenuEntry.Text = "Thumbstick Layout";
             backMenuEntry.Text = Strings.Back;
 
 
@@ -138,7 +141,6 @@ namespace ProjectStella
         #endregion
 
         #region Handle Input
-
 
         /// <summary>
         /// Event handler for when the Difficulty menu entry is selected.
@@ -184,6 +186,14 @@ namespace ProjectStella
         }
 
         /// <summary>
+        /// Event handler for when the Thumbstick Layout menu entry is selected.
+        /// </summary>
+        void ThumbStickLayoutMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            ScreenManager.AddScreen(new ThumbstickLayoutScreen(), e.PlayerIndex);
+        }
+
+        /// <summary>
         /// Event handler for when the Frobnicate menu entry is selected.
         /// </summary>
         void FrobnicateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -220,7 +230,6 @@ namespace ProjectStella
         /// Overrides the OnCancel method so that we don't get stuck
         /// in the BlankTransitionScreen.
         /// </summary>
-        /// <param name="playerIndex"></param>
         protected override void OnCancel(PlayerIndex playerIndex)
         {
             if (comingFrom == "MainMenu")
@@ -234,7 +243,6 @@ namespace ProjectStella
 
             }
         }
-        
 
         #endregion
     }

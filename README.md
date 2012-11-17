@@ -27,4 +27,4 @@ distributed, or transmitted in any form or by any means.
 -----------
 Known Bugs
 -----------
-- Backing out of some screens can cause the user to get stuck in a blank screen.
+- None

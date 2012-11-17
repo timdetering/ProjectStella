@@ -109,13 +109,14 @@
     <Compile Include="Screens\HelpMenuScreen.cs" />
     <Compile Include="Screens\LoadingScreen.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
-    <Compile Include="Screens\MenuEntry.cs" />
-    <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="ScreenManager\MenuEntry.cs" />
+    <Compile Include="ScreenManager\MenuScreen.cs" />
     <Compile Include="Screens\MessageBoxScreen.cs" />
     <Compile Include="Screens\OptionsMenuScreen.cs" />
     <Compile Include="Screens\PauseMenuScreen.cs" />
-    <Compile Include="Screens\PlayerIndexEventArgs.cs" />
+    <Compile Include="ScreenManager\PlayerIndexEventArgs.cs" />
     <Compile Include="Screens\ShipSelectionScreen.cs" />
+    <Compile Include="Screens\ThumbstickLayoutScreen.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

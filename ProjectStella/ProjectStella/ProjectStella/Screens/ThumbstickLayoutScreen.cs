@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ProjectStella
 {
-    class HelpMenuScreen : MenuScreen
+    class ThumbstickLayoutScreen : MenuScreen
     {
         #region Fields
 
@@ -17,15 +17,12 @@ namespace ProjectStella
 
         #region Initialize
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public HelpMenuScreen()
-            : base("Help", "Normal")
+        public ThumbstickLayoutScreen()
+            : base("Thumbstick Layout", "Normal")
         {
             backMenuEntry = new MenuEntry(string.Empty);
 
-            SetMenuText();
+            SetMenuEntryText();
 
             backMenuEntry.Selected += BackMenuEntrySelected;
 
@@ -33,9 +30,9 @@ namespace ProjectStella
         }
 
         /// <summary>
-        /// Sets the menu entry text.
+        /// Sets the desired message for each individual menu entry.
         /// </summary>
-        void SetMenuText()
+        void SetMenuEntryText()
         {
             backMenuEntry.Text = Strings.Back;
         }
@@ -49,18 +46,7 @@ namespace ProjectStella
         /// </summary>
         void BackMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            BlankTransitionScreen.Load(ScreenManager, false, e.PlayerIndex, new BackgroundScreen(), new MainMenuScreen());
-        }
-
-        /// <summary>
-        /// Overrides the OnCancel method to prevent the user from getting
-        /// stuck in a blank screen.
-        /// </summary>
-        protected override void OnCancel(Microsoft.Xna.Framework.PlayerIndex playerIndex)
-        {
-            base.OnCancel(playerIndex);
-
-            BlankTransitionScreen.Load(ScreenManager, false, playerIndex, new BackgroundScreen(), new MainMenuScreen());
+            OnCancel(e.PlayerIndex);
         }
 
         #endregion
