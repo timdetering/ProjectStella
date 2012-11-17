@@ -1,14 +1,19 @@
-#######################################################
-Name: Project Stella
-#######################################################
+------------
+Project Stella
+------------
 
 ------------
 Description
 ------------
 Project Stella is a space combat indie game being designed
 for the Xbox 360 and Windows-based computers using the XNA
-Framwork designed by Microsft. 
+Framwork designed by Microsoft. 
 
+-----------
+Developers
+-----------
+
+- Austin Ray - Lead Programmer
 
 -----------
 Copyright
@@ -17,3 +22,9 @@ Copyright © 2012 by Austin Ray
 
 All rights reserved. No part of this publication may be reproduced,
 distributed, or transmitted in any form or by any means.
+
+
+-----------
+Known Bugs
+-----------
+- Backing out of some screens can cause the user to get stuck in a blank screen.
