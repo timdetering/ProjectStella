@@ -1,4 +1,3 @@
-Content\Images\Backgrounds\menuBackground.xnb
 Content\Images\blank.xnb
 Content\Images\gradient.xnb
 Content\Sounds\UI\click.xnb
@@ -22,6 +21,7 @@ Content\Fonts\ArialM.xnb
 Content\Fonts\ArialS.xnb
 Content\Fonts\gamefont.xnb
 Content\Fonts\menufont.xnb
+Content\Images\Backgrounds\menuBackground.xnb
 Content\Sounds\sounds.xgs
 Content\Sounds\Wave Bank.xwb
 Content\Sounds\Sound Bank.xsb

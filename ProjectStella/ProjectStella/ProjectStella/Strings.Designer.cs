@@ -70,11 +70,29 @@ namespace ProjectStella {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current cultureL {0}.
+        /// </summary>
+        internal static string Credits {
+            get {
+                return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current culture: {0}.
         /// </summary>
         internal static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current culture: {0}.
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
             }
         }
         

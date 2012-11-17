@@ -29,17 +29,23 @@ namespace ProjectStella
 
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry(Strings.PlayGame);
+            MenuEntry helpMenuEntry = new MenuEntry(Strings.Help);
             MenuEntry optionsMenuEntry = new MenuEntry(Strings.Options);
+            MenuEntry creditsMenuEntry = new MenuEntry(Strings.Credits);
             MenuEntry exitMenuEntry = new MenuEntry(Strings.Exit);
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
+            helpMenuEntry.Selected += HelpMenuEntrySelected;
             optionsMenuEntry.Selected += OptionsMenuEntrySelected;
+            creditsMenuEntry.Selected += CreditsMenuEntrySelected;
             exitMenuEntry.Selected += OnCancel;
 
             // Add entries to the menu.
             MenuEntries.Add(playGameMenuEntry);
+            MenuEntries.Add(helpMenuEntry);
             MenuEntries.Add(optionsMenuEntry);
+            MenuEntries.Add(creditsMenuEntry);
             MenuEntries.Add(exitMenuEntry);
         }
 
@@ -56,6 +62,14 @@ namespace ProjectStella
             BlankTransitionScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new ShipSelectionScreen(ScreenManager));
         }
 
+        /// <summary>
+        /// The Event handler for when the Help menu entry is selected.
+        /// </summary>
+        void HelpMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            BlankTransitionScreen.Load(ScreenManager, false, e.PlayerIndex, new BackgroundScreen(), new HelpMenuScreen());
+        }
+
 
         /// <summary>
         /// Event handler for when the Options menu entry is selected.
@@ -63,6 +77,15 @@ namespace ProjectStella
         void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
             BlankTransitionScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new OptionsMenuScreen(comingFrom));
+        }
+
+        /// <summary>
+        /// Event handler for when the Credits menu entry is selected.
+        /// </summary>
+
+        void CreditsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            BlankTransitionScreen.Load(ScreenManager, false, e.PlayerIndex, new BackgroundScreen(), new CreditsScreen());
         }
 
 

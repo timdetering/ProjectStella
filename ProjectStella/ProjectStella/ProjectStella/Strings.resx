@@ -120,7 +120,13 @@
   <data name="Back" xml:space="preserve">
     <value>Current culture: {0}</value>
   </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Current cultureL {0}</value>
+  </data>
   <data name="Exit" xml:space="preserve">
+    <value>Current culture: {0}</value>
+  </data>
+  <data name="Help" xml:space="preserve">
     <value>Current culture: {0}</value>
   </data>
   <data name="Options" xml:space="preserve">

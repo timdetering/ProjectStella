@@ -181,9 +181,13 @@ namespace ProjectStella
 
         }
 
+        /// <summary>
+        /// Positions the menu entries according to how they should
+        /// be displayed on the screen.
+        /// </summary>
         void UpdateMainMenuEntryLocations()
         {
-            Vector2 position = new Vector2(75f, 550f);
+            Vector2 position = new Vector2(75f, 500f);
 
             // update each menu entry's location in turn
             for (int i = 0; i < menuEntries.Count; i++)
@@ -203,6 +207,10 @@ namespace ProjectStella
             }
         }
 
+
+        /// <summary>
+        /// Places the menu entry in their default state.
+        /// </summary>
         void UpdateNormalEntryLocations()
         {
             // start at Y = 175; each X value is generated per entry
