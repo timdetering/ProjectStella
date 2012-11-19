@@ -111,7 +111,7 @@
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="ScreenManager\MenuEntry.cs" />
     <Compile Include="ScreenManager\MenuScreen.cs" />
-    <Compile Include="Screens\MessageBoxScreen.cs" />
+    <Compile Include="ScreenManager\MessageBoxScreen.cs" />
     <Compile Include="Screens\OptionsMenuScreen.cs" />
     <Compile Include="Screens\PauseMenuScreen.cs" />
     <Compile Include="ScreenManager\PlayerIndexEventArgs.cs" />

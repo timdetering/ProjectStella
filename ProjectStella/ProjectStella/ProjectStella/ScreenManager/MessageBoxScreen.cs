@@ -14,10 +14,22 @@ namespace ProjectStella
     /// </summary>
     class MessageBoxScreen : GameScreen
     {
+        #region Constants
+
+        const string usageText = "\nA button = Yes" +
+                                 "\nB button = No";
+        const string yesText = "Yes";
+        const string noText = "No";
+
+        #endregion
+
         #region Fields
 
         string message;
         Texture2D gradientTexture;
+        Texture2D blankTexture;
+        Texture2D aButtonTexture;
+        Texture2D bButtonTexture;
 
         SoundEffect uiClick;
         SoundEffectInstance uiClickInstance;
@@ -48,10 +60,7 @@ namespace ProjectStella
         /// "A=ok, B=cancel" usage text prompt.
         /// </summary>
         public MessageBoxScreen(string message, bool includeUsageText)
-        {
-            const string usageText = "\nA button, Space, Enter = ok" +
-                                     "\nB button, Esc = cancel"; 
-            
+        {   
             if (includeUsageText)
                 this.message = message + usageText;
             else
@@ -75,11 +84,15 @@ namespace ProjectStella
             ContentManager content = ScreenManager.Game.Content;
 
             gradientTexture = content.Load<Texture2D>("Images/gradient");
+            blankTexture = content.Load<Texture2D>("Images/blank");
+
+            aButtonTexture = content.Load<Texture2D>("Images/Buttons/xboxControllerButtonA");
+            bButtonTexture = content.Load<Texture2D>("Images/Buttons/xboxControllerButtonB");
+
             uiClick = content.Load<SoundEffect>("Sounds/UI/click");
 
             uiClickInstance = uiClick.CreateInstance();
         }
-
 
         #endregion
 
@@ -127,7 +140,6 @@ namespace ProjectStella
 
         #region Draw
 
-
         /// <summary>
         /// Draws the message box.
         /// </summary>
@@ -154,10 +166,15 @@ namespace ProjectStella
                                                           (int)textSize.X + hPad * 2,
                                                           (int)textSize.Y + vPad * 2);
 
+            Rectangle borderRectangle = new Rectangle(backgroundRectangle.X - 2, backgroundRectangle.Y - 2, backgroundRectangle.Width + 4, backgroundRectangle.Height + 4);
+
             // Fade the popup alpha during transitions.
             Color color = Color.White * TransitionAlpha;
 
             spriteBatch.Begin();
+
+            // Draw the border rectangle
+            spriteBatch.Draw(blankTexture, borderRectangle, Color.Black);
 
             // Draw the background rectangle.
             spriteBatch.Draw(gradientTexture, backgroundRectangle, color);
@@ -167,7 +184,6 @@ namespace ProjectStella
 
             spriteBatch.End();
         }
-
 
         #endregion
     }

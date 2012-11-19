@@ -1,7 +1,7 @@
 #region Using Statements
-using Microsoft.Xna.Framework;
-using System.Globalization;
 using System.Threading;
+using System.Globalization;
+using Microsoft.Xna.Framework;
 #endregion
 
 namespace ProjectStella
@@ -94,7 +94,7 @@ namespace ProjectStella
         /// </summary>
         protected override void OnCancel(PlayerIndex playerIndex)
         {
-            const string message = "Are you sure you want to exit this sample?";
+            const string message = "Are you sure you want to exit?";
 
             MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
 

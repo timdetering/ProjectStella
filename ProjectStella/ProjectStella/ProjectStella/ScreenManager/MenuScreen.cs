@@ -30,6 +30,8 @@ namespace ProjectStella
         SoundEffect uiClick;
         SoundEffect scroll;
 
+        Texture2D menuEntryBackground;
+
         #endregion
 
         #region Properties
@@ -69,6 +71,8 @@ namespace ProjectStella
 
             uiClick = content.Load<SoundEffect>("Sounds/UI/click");
             scroll = content.Load<SoundEffect>("Sounds/UI/scroll");
+
+            menuEntryBackground = content.Load<Texture2D>("Images/gradient");
 
             base.LoadContent();
         }
@@ -277,6 +281,8 @@ namespace ProjectStella
 
                 bool isSelected = IsActive && (i == selectedEntry);
 
+                // Code for a background on the main menu entries
+                // spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(255,255,255, .05f));
                 menuEntry.Draw(this, isSelected, gameTime);
             }
 
