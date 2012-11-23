@@ -86,8 +86,8 @@ namespace ProjectStella
             gradientTexture = content.Load<Texture2D>("Images/gradient");
             blankTexture = content.Load<Texture2D>("Images/blank");
 
-            aButtonTexture = content.Load<Texture2D>("Images/Buttons/xboxControllerButtonA");
-            bButtonTexture = content.Load<Texture2D>("Images/Buttons/xboxControllerButtonB");
+            aButtonTexture = content.Load<Texture2D>("Images/Buttons/A");
+            bButtonTexture = content.Load<Texture2D>("Images/Buttons/B");
 
             uiClick = content.Load<SoundEffect>("Sounds/UI/click");
 

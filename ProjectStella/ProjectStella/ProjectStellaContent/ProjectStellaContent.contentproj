@@ -176,13 +176,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Images\Buttons\xboxControllerButtonA.tga">
-      <Name>xboxControllerButtonA</Name>
+    <Compile Include="Images\Buttons\A.tga">
+      <Name>A</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Images\Buttons\xboxControllerButtonB.tga">
-      <Name>xboxControllerButtonB</Name>
+    <Compile Include="Images\Buttons\B.tga">
+      <Name>B</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -195,8 +195,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="controller.png">
+    <Compile Include="Images\Controller\controller.png">
       <Name>controller</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Images\Buttons\X.tga">
+      <Name>X</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Images\Buttons\Y.tga">
+      <Name>Y</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

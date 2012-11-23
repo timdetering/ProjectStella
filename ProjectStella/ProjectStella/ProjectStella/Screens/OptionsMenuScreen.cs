@@ -15,12 +15,12 @@ namespace ProjectStella
     {
         #region Fields
 
+        // Determines what screen the player is coming from.
         string comingFrom;
 
         // Creates all of the menu entries that are on the options screen
         MenuEntry difficultyMenuEntry;
         MenuEntry languageMenuEntry;
-        MenuEntry invertYMenuEntry;
         MenuEntry buttonLayoutMenuEntry;
         MenuEntry thumbstickLayoutMenuEntry;
         MenuEntry backMenuEntry;
@@ -42,9 +42,6 @@ namespace ProjectStella
         static string[] languages = { "English", "French" };
         static int currentLanguage = 0;
 
-        static string[] invertY = { "No", "Yes" };
-        static int currentInvertY = 0;
-
         static bool frobnicate = true;
 
         static int elf = 23;
@@ -65,7 +62,6 @@ namespace ProjectStella
             // Create our menu entries.
             difficultyMenuEntry = new MenuEntry(string.Empty);
             languageMenuEntry = new MenuEntry(string.Empty);
-            invertYMenuEntry = new MenuEntry(string.Empty);
             buttonLayoutMenuEntry = new MenuEntry(string.Empty);
             thumbstickLayoutMenuEntry = new MenuEntry(string.Empty);
             backMenuEntry = new MenuEntry(string.Empty);
@@ -78,7 +74,6 @@ namespace ProjectStella
             // Hook up menu event handlers.
             difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
             languageMenuEntry.Selected += LanguageMenuEntrySelected;
-            invertYMenuEntry.Selected += InvertYMenuEntrySelected;
             buttonLayoutMenuEntry.Selected += ButtonLayoutMenuEntrySelected;
             thumbstickLayoutMenuEntry.Selected += ThumbStickLayoutMenuEntrySelected;
 
@@ -89,7 +84,6 @@ namespace ProjectStella
             // Add entries to the menu.
             MenuEntries.Add(languageMenuEntry);
             MenuEntries.Add(difficultyMenuEntry);
-            MenuEntries.Add(invertYMenuEntry);
             MenuEntries.Add(buttonLayoutMenuEntry);
             MenuEntries.Add(thumbstickLayoutMenuEntry);
             //MenuEntries.Add(frobnicateMenuEntry);
@@ -115,14 +109,9 @@ namespace ProjectStella
 
             languageMenuEntry.Text = "Language: " + languages[currentLanguage];
             difficultyMenuEntry.Text = "Difficulty: " + currentDifficulty;
-            invertYMenuEntry.Text = "Invert Y: " + currentInvertY;
             buttonLayoutMenuEntry.Text = "Button Layout";
             thumbstickLayoutMenuEntry.Text = "Thumbstick Layout";
-            backMenuEntry.Text = Strings.Back;
-
-
-            //frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
-            //elfMenuEntry.Text = "elf: " + elf;
+            backMenuEntry.Text = Strings.Back;                                 
         }
 
         /// <summary>
@@ -163,16 +152,6 @@ namespace ProjectStella
             currentLanguage = (currentLanguage + 1) % languages.Length;
 
             UpdateLanguage();
-
-            SetMenuEntryText();
-        }
-
-        /// <summary>
-        /// Event handler for when the InvertY menu entry is selected.
-        /// </summary>
-        void InvertYMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            currentInvertY = (currentInvertY + 1) % invertY.Length;
 
             SetMenuEntryText();
         }
