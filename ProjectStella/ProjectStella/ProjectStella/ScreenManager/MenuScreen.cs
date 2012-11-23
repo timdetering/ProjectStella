@@ -282,8 +282,9 @@ namespace ProjectStella
                 bool isSelected = IsActive && (i == selectedEntry);
 
                 // Code for a background on the main menu entries
-                // spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(255,255,255, .05f));
-                menuEntry.Draw(this, isSelected, gameTime);
+                if(menuType == "MainMenu")
+                    spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(0,0,0,.9f));
+                menuEntry.Draw(this, isSelected, gameTime, menuType);
             }
 
             // Make the menu slide into place during transitions, using a

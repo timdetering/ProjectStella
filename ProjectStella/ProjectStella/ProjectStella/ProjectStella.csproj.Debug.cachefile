@@ -24,6 +24,8 @@ Content\Fonts\menufont.xnb
 Content\Images\Backgrounds\menuBackground.xnb
 Content\Images\Buttons\xboxControllerButtonA.xnb
 Content\Images\Buttons\xboxControllerButtonB.xnb
+Content\whiteText.xnb
+Content\controller.xnb
 Content\Sounds\sounds.xgs
 Content\Sounds\Wave Bank.xwb
 Content\Sounds\Sound Bank.xsb

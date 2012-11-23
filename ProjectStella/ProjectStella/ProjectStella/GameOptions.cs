@@ -125,6 +125,7 @@ namespace ProjectStella
 
         public static string Language = "English";
         public static int DifficultyMod = 1;
+        public static string CurrentThumbstickLayout = Strings.Default;
 
         // Changes the language for the game
         public static void SetLanguage(string language)
@@ -136,6 +137,12 @@ namespace ProjectStella
         public static void SetDifficulty(int difficultyModifier)
         {
             DifficultyMod = difficultyModifier;
+        }
+
+        // Changes the thumbstick layout for the game
+        public static void SetThumbstickLayout(string thumbStickLayout)
+        {
+            CurrentThumbstickLayout = thumbStickLayout;
         }
     }
 }

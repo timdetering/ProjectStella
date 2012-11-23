@@ -70,11 +70,20 @@ namespace ProjectStella {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current cultureL {0}.
+        ///   Looks up a localized string similar to Current culture: {0}.
         /// </summary>
         internal static string Credits {
             get {
                 return ResourceManager.GetString("Credits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current culture: {0}.
+        /// </summary>
+        internal static string Default {
+            get {
+                return ResourceManager.GetString("Default", resourceCulture);
             }
         }
         
@@ -129,6 +138,15 @@ namespace ProjectStella {
         internal static string Resume {
             get {
                 return ResourceManager.GetString("Resume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current culture: {0}.
+        /// </summary>
+        internal static string Southpaw {
+            get {
+                return ResourceManager.GetString("Southpaw", resourceCulture);
             }
         }
     }

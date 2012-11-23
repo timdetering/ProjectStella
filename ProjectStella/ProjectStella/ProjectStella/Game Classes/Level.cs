@@ -20,12 +20,9 @@ namespace ProjectStella
         #region Fields
 
         ContentManager content;
-        SpriteBatch spriteBatch;
 
         ScreenManager screenManager;
         GameManager gameManager;
-
-        Texture2D background;
 
         SpriteFont font;
         #endregion

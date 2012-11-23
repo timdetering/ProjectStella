@@ -121,7 +121,10 @@
     <value>Current culture: {0}</value>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Current cultureL {0}</value>
+    <value>Current culture: {0}</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Current culture: {0}</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Current culture: {0}</value>
@@ -139,6 +142,9 @@
     <value>Current culture: {0}</value>
   </data>
   <data name="Resume" xml:space="preserve">
+    <value>Current culture: {0}</value>
+  </data>
+  <data name="Southpaw" xml:space="preserve">
     <value>Current culture: {0}</value>
   </data>
 </root>

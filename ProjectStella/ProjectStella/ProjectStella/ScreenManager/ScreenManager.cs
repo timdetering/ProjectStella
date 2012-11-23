@@ -31,6 +31,7 @@ namespace ProjectStella
         SpriteBatch spriteBatch;
         SpriteFont font;
         Texture2D blankTexture;
+        Texture2D whiteText;
 
         bool isInitialized;
 
@@ -58,6 +59,11 @@ namespace ProjectStella
         public SpriteFont Font
         {
             get { return font; }
+        }
+
+        public Texture2D WhiteText
+        {
+            get { return whiteText; }
         }
 
 
@@ -111,6 +117,7 @@ namespace ProjectStella
             spriteBatch = new SpriteBatch(GraphicsDevice);
             font = content.Load<SpriteFont>("Fonts/menufont");
             blankTexture = content.Load<Texture2D>("Images/blank");
+            whiteText = content.Load<Texture2D>("whiteText");
 
             // Tell each of the screens to load their content.
             foreach (GameScreen screen in screens)

@@ -180,7 +180,7 @@ namespace ProjectStella
             spriteBatch.Draw(gradientTexture, backgroundRectangle, color);
 
             // Draw the message box text.
-            spriteBatch.DrawString(font, message, textPosition, color);
+            spriteBatch.DrawString(font, message, textPosition, Color.White * TransitionAlpha);
 
             spriteBatch.End();
         }

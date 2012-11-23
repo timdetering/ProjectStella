@@ -14,8 +14,6 @@ namespace ProjectStella
     {
         #region Fields
 
-        string comingFrom;
-
         MenuEntry backMenuEntry;
 
         #endregion

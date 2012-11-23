@@ -126,7 +126,7 @@ namespace ProjectStella
         /// <summary>
         /// Draws the menu entry. This can be overridden to customize the appearance.
         /// </summary>
-        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
+        public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime, string menuType)
         {
             // there is no such thing as a selected item on Windows Phone, so we always
             // force isSelected to be false
@@ -145,12 +145,13 @@ namespace ProjectStella
             //float scale = 1 + pulsate * 0.05f * selectionFade;
 
             // Modify the alpha to fade text out during transitions.
-            color *= screen.TransitionAlpha;
+            color *= screen.TransitionAlpha * 2;
 
             // Draw text, centered on the middle of each line.
             ScreenManager screenManager = screen.ScreenManager;
             SpriteBatch spriteBatch = screenManager.SpriteBatch;
             SpriteFont font = screenManager.Font;
+            Texture2D whiteText = screenManager.WhiteText;
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
 
@@ -158,6 +159,9 @@ namespace ProjectStella
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
+
+            if (isSelected && menuType == "MainMenu")
+                spriteBatch.Draw(whiteText, new Rectangle((int)position.X - 10, (int)position.Y - 15, 2, font.LineSpacing), Color.White);
         }
 
 
