@@ -126,6 +126,7 @@ namespace ProjectStella
         public static string Language = "English";
         public static int DifficultyMod = 1;
         public static string CurrentThumbstickLayout = Strings.Default;
+        public static string CurrentButtonLayout = Strings.Default;
         public static bool YInverted = false;
         public static bool XInverted = false;
 
@@ -145,6 +146,12 @@ namespace ProjectStella
         public static void SetThumbstickLayout(string thumbStickLayout)
         {
             CurrentThumbstickLayout = thumbStickLayout;
+        }
+
+        // Changes the thumbstick layout for the game
+        public static void SetButtonLayout(string buttonLayout)
+        {
+            CurrentButtonLayout = buttonLayout;
         }
 
         // Changes the inversion of the Y axis

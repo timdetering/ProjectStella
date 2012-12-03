@@ -22,12 +22,14 @@ Content\Fonts\ArialS.xnb
 Content\Fonts\gamefont.xnb
 Content\Fonts\menufont.xnb
 Content\Images\Backgrounds\menuBackground.xnb
-Content\whiteText.xnb
 Content\Images\Buttons\A.xnb
 Content\Images\Buttons\B.xnb
+Content\whiteText.xnb
 Content\Images\Controller\controller.xnb
 Content\Images\Buttons\X.xnb
 Content\Images\Buttons\Y.xnb
+Content\arrow.xnb
+Content\backgroundPlaceholder.xnb
 Content\Sounds\sounds.xgs
 Content\Sounds\Wave Bank.xwb
 Content\Sounds\Sound Bank.xsb

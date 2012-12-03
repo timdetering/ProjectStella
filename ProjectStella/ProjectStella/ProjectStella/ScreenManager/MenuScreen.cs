@@ -178,10 +178,10 @@ namespace ProjectStella
 
             switch (menuType)
             {
-                case "MainMenu" :
+                case "MainMenu":
                     UpdateMainMenuEntryLocations();
                     break;
-                case "Normal" :
+                case "Normal":
                     UpdateNormalEntryLocations();
                     break;
             }
@@ -227,7 +227,7 @@ namespace ProjectStella
             for (int i = 0; i < menuEntries.Count; i++)
             {
                 MenuEntry menuEntry = menuEntries[i];
-                
+
                 // each entry is to be centered horizontally
                 position.X = ScreenManager.GraphicsDevice.Viewport.Width / 2 - menuEntry.GetWidth(this) / 2;
 
@@ -285,8 +285,8 @@ namespace ProjectStella
                 bool isSelected = IsActive && (i == selectedEntry);
 
                 // Code for a background on the main menu entries
-                if(menuType == "MainMenu")
-                    spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(0,0,0,.9f));
+                if (menuType == "MainMenu")
+                    spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(0, 0, 0, .9f));
                 menuEntry.Draw(this, isSelected, gameTime, menuType);
             }
 

@@ -27,6 +27,12 @@ namespace ProjectStella
         Texture2D xButtonTexture;
         Texture2D yButtonTexture;
 
+        // Arrow Textures
+        Texture2D arrowTexture;
+
+        // Background Texture
+        Texture2D background;
+
         string message =  GameOptions.CurrentThumbstickLayout;
         int currentThumbstickLayoutNumber;
         string[] thumbStickLayoutNames = { "Default", "Southpaw", "Placeholder" };
@@ -108,6 +114,12 @@ namespace ProjectStella
             bButtonTexture = content.Load<Texture2D>("Images/Buttons/B");
             xButtonTexture = content.Load<Texture2D>("Images/Buttons/X");
             yButtonTexture = content.Load<Texture2D>("Images/Buttons/Y");
+
+            // Arrow images
+            arrowTexture = content.Load<Texture2D>("arrow");
+
+            // Background Image
+            background = content.Load<Texture2D>("backgroundPlaceholder");
         }
 
         /// <summary>
@@ -160,6 +172,9 @@ namespace ProjectStella
             if (oldKeyboardState.IsKeyUp(Keys.Left) && keyboardState.IsKeyDown(Keys.Left))
             {
                 currentThumbstickLayoutNumber = (currentThumbstickLayoutNumber - 1) % thumbStickLayoutNames.Length;
+
+                if (currentThumbstickLayoutNumber == -1)
+                    currentThumbstickLayoutNumber = 2;
 
                 SetText();
             }
@@ -219,6 +234,8 @@ namespace ProjectStella
             Viewport viewport = ScreenManager.GraphicsDevice.Viewport;
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
+            #region Origins
+
             // Origin for the controller image
             Vector2 origin = new Vector2(controllerImage.Width, controllerImage.Height) / 2;
 
@@ -228,29 +245,49 @@ namespace ProjectStella
             Vector2 xOrigin = new Vector2(xButtonTexture.Width, xButtonTexture.Height) / 2;
             Vector2 yOrigin = new Vector2(yButtonTexture.Width, yButtonTexture.Height) / 2;
 
+            // Origin for arrow picture
+            Vector2 arrowOrigin = new Vector2(arrowTexture.Width, arrowTexture.Height) / 2;
+
+            // Origin for background
+            Vector2 backgroundOrigin = new Vector2(background.Width, background.Height) / 2;
+
+            #endregion
+
             // Sets the font to the ScreenManager's font.
             SpriteFont font = ScreenManager.Font;
 
-            Vector2 stringLength;
+            Color yColor = yInverted ? Color.Black : Color.White;
+            Color xColor = xInverted ? Color.Black : Color.White;
 
-            Color yColor = yInverted ? Color.Yellow : Color.White;
-            Color xColor = xInverted ? Color.Yellow : Color.White;
+            // Messages the thumbstick layout names
+            Vector2 stringLength = font.MeasureString(message);
 
-            stringLength = font.MeasureString(message);
+            // Measures the Invert X and Y messages.
+            Vector2 measureInvertY = font.MeasureString("Invert Y");
+            Vector2 measureInvertX = font.MeasureString("Invert X");
 
             spriteBatch.Begin();
+
+            //Draw Background
+            spriteBatch.Draw(background, new Vector2(viewport.Width, viewport.Height) / 2, null, Color.White * TransitionAlpha, 0f, backgroundOrigin, 1f, SpriteEffects.None, 0f);
 
             // Draw the name of the current thumbstick layout.
             spriteBatch.DrawString(font, message, new Vector2(640f - (stringLength.X / 2), 100), Color.White * TransitionAlpha);
 
-            spriteBatch.DrawString(font, GameOptions.YInverted.ToString(), Vector2.Zero, Color.White * TransitionAlpha);
-            spriteBatch.DrawString(font, GameOptions.XInverted.ToString(), Vector2.Zero + new Vector2(0, font.LineSpacing), Color.White * TransitionAlpha);
+            // Draw the arrow images
+            spriteBatch.Draw(arrowTexture, new Vector2(640f + stringLength.X / 2 + 20, 102 + font.LineSpacing / 2), null, Color.White * TransitionAlpha, 0f, arrowOrigin, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(arrowTexture, new Vector2(640f - stringLength.X / 2 - 20, 102 + font.LineSpacing / 2), null, Color.White * TransitionAlpha, MathHelper.Pi, arrowOrigin, 1f, SpriteEffects.None, 0f);
 
             // Draw the image of the thumbstick layout.
             spriteBatch.Draw(controllerImage, new Vector2(640f, 360f), null, Color.White * TransitionAlpha, 0f, origin, 0.4f, SpriteEffects.None, 0f);
 
-            spriteBatch.Draw(yButtonTexture, new Vector2(640f - yButtonTexture.Width / 2, 720f - yButtonTexture.Height / 2), null, Color.White * TransitionAlpha, 0f, yOrigin, .5f,SpriteEffects.None, 0f);
-            spriteBatch.DrawString(font, "Invert Y", new Vector2(640f - font.MeasureString("InvertY").X / 2, 720f - font.LineSpacing), yColor * TransitionAlpha, 0f, font.MeasureString("Invert Y") / 2, 1, SpriteEffects.None, 0f);
+            // Draw the invert Y text and image.
+            spriteBatch.Draw(yButtonTexture, new Vector2(620f - yButtonTexture.Width - measureInvertY.X / 2, 620f - yButtonTexture.Height / 2), null, Color.White * TransitionAlpha, 0f, yOrigin, .5f,SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, "Invert Y", new Vector2(620f - measureInvertY.X / 2, 617f - font.LineSpacing), yColor * TransitionAlpha, 0f, measureInvertY / 2, 1f, SpriteEffects.None, 0f);
+
+            // Draw the invert X text and image.
+            spriteBatch.Draw(xButtonTexture, new Vector2(660f + xButtonTexture.Width / 2, 620f - xButtonTexture.Height / 2), null, Color.White * TransitionAlpha, 0f, xOrigin, .5f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, "Invert X", new Vector2(660f + xButtonTexture.Width + measureInvertX.X / 2 - 15, 617f - font.LineSpacing), xColor * TransitionAlpha, 0f, measureInvertX / 2, 1f, SpriteEffects.None, 0f);
 
             spriteBatch.End();
             
