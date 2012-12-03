@@ -48,8 +48,10 @@ namespace ProjectStella
         /// </summary>
         public ThumbstickLayoutScreen()
         {
+            // Determines what position in the thumbstick layout array we are.
             DeterminePosition();
 
+            // Calls the method to set the text on the screen.
             SetText();
 
             // Transitions on in half a second.
@@ -231,6 +233,9 @@ namespace ProjectStella
 
             Vector2 stringLength;
 
+            Color yColor = yInverted ? Color.Yellow : Color.White;
+            Color xColor = xInverted ? Color.Yellow : Color.White;
+
             stringLength = font.MeasureString(message);
 
             spriteBatch.Begin();
@@ -243,6 +248,9 @@ namespace ProjectStella
 
             // Draw the image of the thumbstick layout.
             spriteBatch.Draw(controllerImage, new Vector2(640f, 360f), null, Color.White * TransitionAlpha, 0f, origin, 0.4f, SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(yButtonTexture, new Vector2(640f - yButtonTexture.Width / 2, 720f - yButtonTexture.Height / 2), null, Color.White * TransitionAlpha, 0f, yOrigin, .5f,SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, "Invert Y", new Vector2(640f - font.MeasureString("InvertY").X / 2, 720f - font.LineSpacing), yColor * TransitionAlpha, 0f, font.MeasureString("Invert Y") / 2, 1, SpriteEffects.None, 0f);
 
             spriteBatch.End();
             

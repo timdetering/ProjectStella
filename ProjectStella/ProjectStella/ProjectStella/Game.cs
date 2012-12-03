@@ -34,6 +34,11 @@ namespace ProjectStella
         static readonly string[] preloadAssets =
         {
             "Images/gradient",
+            "Images/Controller/controller",
+            "Images/Buttons/A",
+            "Images/Buttons/B",
+            "Images/Buttons/X",
+            "Images/Buttons/Y",
         };
 
         
@@ -58,7 +63,7 @@ namespace ProjectStella
 
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             IsFixedTimeStep = renderVsync;
             graphics.SynchronizeWithVerticalRetrace = renderVsync;

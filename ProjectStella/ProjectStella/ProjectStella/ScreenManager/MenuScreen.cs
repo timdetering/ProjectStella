@@ -64,6 +64,9 @@ namespace ProjectStella
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
 
+        /// <summary>
+        /// Loads the content for every MenuScreen.
+        /// </summary>
         public override void LoadContent()
         {
             if (content == null)
@@ -201,7 +204,7 @@ namespace ProjectStella
                 if (ScreenState == ScreenState.TransitionOn)
                     position.X -= transitionOffset * 256;
                 else
-                    position.X += transitionOffset * 512;
+                    position.X -= transitionOffset * 512;
 
                 // set the entry's position
                 menuEntry.Position = position;
