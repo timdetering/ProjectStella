@@ -17,6 +17,8 @@ namespace ProjectStella
     {
         #region Fields
 
+        static Game instance;
+
         GraphicsDeviceManager graphics;
         ScreenManager screenManager;
         GameManager game;
@@ -64,6 +66,7 @@ namespace ProjectStella
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
             graphics.IsFullScreen = false;
+            graphics.PreferMultiSampling = true;
 
             IsFixedTimeStep = renderVsync;
             graphics.SynchronizeWithVerticalRetrace = renderVsync;
@@ -116,8 +119,27 @@ namespace ProjectStella
 
 
         #endregion
-    }
 
+        #region Entry Point
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        static void Main()
+        {
+            using (Game game = new Game())
+            {
+                instance = game;
+                game.Run();
+            }
+        }
+        #endregion
+
+        static public Game GetInstance()
+        {
+            return instance;
+        }
+    }
+    /*
     #region Entry Point
         #if WINDOWS || XBOX
             static class Program
@@ -135,5 +157,5 @@ namespace ProjectStella
             }
         #endif
     #endregion
-
+     * */
 }
