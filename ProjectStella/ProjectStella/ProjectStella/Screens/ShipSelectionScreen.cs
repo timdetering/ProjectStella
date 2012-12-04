@@ -58,6 +58,10 @@ namespace ProjectStella
         // total elapsed time for ship model rotation
         float elapsedTime = 0.0f;
 
+        //  Keyboard states for input.
+        KeyboardState keyboardState;
+        KeyboardState oldKeyboardState;
+
         #endregion
 
         #region Initialize
@@ -135,13 +139,37 @@ namespace ProjectStella
         public override void HandleInput(InputState input)
         {
             base.HandleInput(input);
+
+            // If input is null, then throw an exception.
+            if (input == null)
+                throw new ArgumentNullException("input");
+
+            // Look up inputs for the active player profile.
+            int playerIndex = (int)ControllingPlayer.Value;
+
+            // Gets the input of the current player.
+            keyboardState = input.CurrentKeyboardStates[playerIndex];
+
+           // Sends user to the main menu.
+            if (oldKeyboardState.IsKeyUp(Keys.Escape) && keyboardState.IsKeyDown(Keys.Escape))
+            {
+                BlankTransitionScreen.Load(ScreenManager, false, ControllingPlayer, new BackgroundScreen(), new MainMenuScreen());
+            }
+
+            // Sends user to the Gameplay Screen.
+            if (oldKeyboardState.IsKeyUp(Keys.Enter) && keyboardState.IsKeyDown(Keys.Enter))
+            {
+                LoadingScreen.Load(ScreenManager, true, ControllingPlayer, new GameplayScreen());
+            }
+
+            // Sets the "old" keyboard states
+            oldKeyboardState = keyboardState;
         }
 
         #endregion
 
         public override void Draw(GameTime gameTime)
         {
-            //YOUR MOM US A WHORE JUST LIKE YOU
             base.Draw(gameTime);
 
             GraphicsDevice gd = ScreenManager.GraphicsDevice;
