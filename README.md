@@ -13,7 +13,8 @@ Framwork designed by Microsoft.
 Developers
 -----------
 
-- Austin Ray - Lead Programmer
+- Austin Ray - Programmer
+- Andrew Evans - Programmer
 
 -----------
 Copyright
