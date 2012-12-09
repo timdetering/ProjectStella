@@ -23,7 +23,7 @@ namespace ProjectStella
         /// Constructor fills in the menu contents.
         /// </summary>
         public MainMenuScreen()
-            : base("Inter Stellarum", "MainMenu")
+            : base(null, "MainMenu")
         {
             Strings.Culture = CultureInfo.CurrentUICulture;
 

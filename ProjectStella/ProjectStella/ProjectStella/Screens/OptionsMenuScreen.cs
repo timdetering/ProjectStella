@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Globalization;
 using System.Threading;
+using System;
 #endregion
 
 namespace ProjectStella
@@ -57,6 +58,9 @@ namespace ProjectStella
         public OptionsMenuScreen(string comingFrom)
             : base("Options","Normal")
         {
+            TransitionOnTime = TimeSpan.Zero;
+            TransitionOffTime = TimeSpan.FromSeconds(0f);
+
             this.comingFrom = comingFrom;
 
             // Create our menu entries.

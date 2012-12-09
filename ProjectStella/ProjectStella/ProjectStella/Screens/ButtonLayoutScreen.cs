@@ -61,10 +61,10 @@ namespace ProjectStella
             SetText();
 
             // Transitions on in half a second.
-            TransitionOnTime = TimeSpan.FromSeconds(.25f);
+            TransitionOnTime = TimeSpan.FromSeconds(0f);
 
             // Transitions off in a quarter of a second.
-            TransitionOffTime = TimeSpan.FromSeconds(.25f);
+            TransitionOffTime = TimeSpan.FromSeconds(0f);
         }
 
         /// <summary>

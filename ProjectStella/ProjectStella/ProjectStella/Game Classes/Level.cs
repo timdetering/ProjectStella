@@ -25,6 +25,9 @@ namespace ProjectStella
         GameManager gameManager;
 
         SpriteFont font;
+
+       
+
         #endregion
 
         #region Initialize
@@ -61,12 +64,7 @@ namespace ProjectStella
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin();
-
-            spriteBatch.DrawString(font, GameOptions.Language, Vector2.Zero, Color.White);
-            spriteBatch.DrawString(font, GameOptions.DifficultyMod.ToString(), new Vector2(0, 35), Color.White);
-
-            spriteBatch.End();
+            
         }
 
         #endregion

@@ -139,7 +139,9 @@ namespace ProjectStella
             return instance;
         }
     }
-    /*
+
+
+    /* Old entry point. Might use at some point in the future.
     #region Entry Point
         #if WINDOWS || XBOX
             static class Program

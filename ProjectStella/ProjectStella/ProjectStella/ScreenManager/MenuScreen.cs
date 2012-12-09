@@ -31,6 +31,7 @@ namespace ProjectStella
         SoundEffect scroll;
 
         Texture2D menuEntryBackground;
+        Texture2D menuScreenBackground;
 
         #endregion
 
@@ -76,6 +77,7 @@ namespace ProjectStella
             scroll = content.Load<SoundEffect>("Sounds/UI/scroll");
 
             menuEntryBackground = content.Load<Texture2D>("Images/gradient");
+            menuScreenBackground = content.Load<Texture2D>("backgroundPlaceholder");
 
             base.LoadContent();
         }
@@ -171,11 +173,6 @@ namespace ProjectStella
         /// </summary>
         protected virtual void UpdateMenuEntryLocations()
         {
-            // Make the menu slide into place during transitions, using a
-            // power curve to make things look more interesting (this makes
-            // the movement slow down as it nears the end).
-            transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-
             switch (menuType)
             {
                 case "MainMenu":
@@ -194,6 +191,11 @@ namespace ProjectStella
         /// </summary>
         void UpdateMainMenuEntryLocations()
         {
+            // Make the menu slide into place during transitions, using a
+            // power curve to make things look more interesting (this makes
+            // the movement slow down as it nears the end).
+            transitionOffset = (float)Math.Pow(TransitionPosition, 2);
+
             Vector2 position = new Vector2(75f, 500f);
 
             // update each menu entry's location in turn
@@ -290,21 +292,20 @@ namespace ProjectStella
                 menuEntry.Draw(this, isSelected, gameTime, menuType);
             }
 
-            // Make the menu slide into place during transitions, using a
-            // power curve to make things look more interesting (this makes
-            // the movement slow down as it nears the end).
-            float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
-            // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
-            Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
-            Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
-            float titleScale = 1.25f;
+            if (menuTitle != null)
+            {
+                // Draw the menu title centered on the screen
+                Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
+                Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
+                Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
+                float titleScale = 1.25f;
 
-            titlePosition.Y -= transitionOffset * 100;
+                titlePosition.Y -= transitionOffset * 100;
 
-            spriteBatch.DrawString(font, menuTitle, titlePosition, titleColor, 0,
-                                   titleOrigin, titleScale, SpriteEffects.None, 0);
+                spriteBatch.DrawString(font, menuTitle, titlePosition, titleColor, 0,
+                                       titleOrigin, titleScale, SpriteEffects.None, 0);
+            }
 
             spriteBatch.End();
         }

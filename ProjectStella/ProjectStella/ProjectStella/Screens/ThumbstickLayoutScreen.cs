@@ -60,11 +60,11 @@ namespace ProjectStella
             // Calls the method to set the text on the screen.
             SetText();
 
-            // Transitions on in half a second.
-            TransitionOnTime = TimeSpan.FromSeconds(.25f);
+            // Transitions on in zero seconds.
+            TransitionOnTime = TimeSpan.FromSeconds(.15f);
 
-            // Transitions off in a quarter of a second.
-            TransitionOffTime = TimeSpan.FromSeconds(.25f);
+            // Transitions off in zero seconds
+            TransitionOffTime = TimeSpan.FromSeconds(.15f);
         }
 
         /// <summary>

@@ -52,7 +52,8 @@ namespace ProjectStella
         /// </summary>
         public MessageBoxScreen(string message)
             : this(message, true)
-        { }
+        {
+        }
 
 
         /// <summary>

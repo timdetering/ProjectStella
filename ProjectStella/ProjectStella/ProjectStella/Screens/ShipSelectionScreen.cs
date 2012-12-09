@@ -49,9 +49,6 @@ namespace ProjectStella
         // confirmed status for each player
         bool[] confirmed = new bool[2] { false, false };
 
-        // invert Y flags (bit flag for each player)
-        uint invertY = 0;
-
         // rotation matrix for each player ship model
         Matrix[] rotation = new Matrix[2] { Matrix.Identity, Matrix.Identity };
 
@@ -70,6 +67,9 @@ namespace ProjectStella
         {
             this.screenManager = screenManager;
             gameManager = screenManager.gameManager;
+
+            TransitionOnTime = TimeSpan.FromSeconds(0f);
+            TransitionOffTime = TimeSpan.FromSeconds(0f);
         }
 
         public override void LoadContent()
@@ -168,6 +168,8 @@ namespace ProjectStella
 
         #endregion
 
+        #region Draw
+
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
@@ -194,9 +196,12 @@ namespace ProjectStella
                 RenderTechnique.NormalMapping,
                 cameraPosition, rotation[0], viewProjection, lights);
 
+            // Rotates the 3D model
+            rotation[0] *= Matrix.CreateRotationY(-.01f);
+
             // draw pad model
             gameManager.DrawModel(gd, padModel,
-                RenderTechnique.NormalMapping,
+               RenderTechnique.NormalMapping,
                 cameraPosition, transform, viewProjection, lights);
 
             // set additive blend
@@ -288,5 +293,7 @@ namespace ProjectStella
 
             return reflectCube;
         }
+
+        #endregion
     }
 }

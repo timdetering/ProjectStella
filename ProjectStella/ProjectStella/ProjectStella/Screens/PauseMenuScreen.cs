@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System.Globalization;
 using System.Threading;
+using System;
 #endregion
 
 namespace ProjectStella
@@ -31,6 +32,9 @@ namespace ProjectStella
         public PauseMenuScreen()
             : base("Paused", "Normal")
         {
+            TransitionOnTime = TimeSpan.Zero;
+            TransitionOffTime = TimeSpan.Zero;
+
             // Create our menu entries.
             resumeGameMenuEntry = new MenuEntry(Strings.Resume);
             optionsMenuEntry = new MenuEntry(Strings.Options);
