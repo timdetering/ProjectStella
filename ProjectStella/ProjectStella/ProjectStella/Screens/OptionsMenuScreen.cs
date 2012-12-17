@@ -1,5 +1,6 @@
 #region Using Statements
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System.Globalization;
 using System.Threading;
 using System;
@@ -15,6 +16,8 @@ namespace ProjectStella
     class OptionsMenuScreen : MenuScreen
     {
         #region Fields
+
+        int col = 1;
 
         // Determines what screen the player is coming from.
         string comingFrom;
@@ -47,6 +50,9 @@ namespace ProjectStella
 
         static int elf = 23;
 
+        KeyboardState keyboardState;
+        KeyboardState oldKeyboardState;
+
         #endregion
 
         #region Initialization
@@ -75,15 +81,18 @@ namespace ProjectStella
 
             SetMenuEntryText();
 
-            // Hook up menu event handlers.
-            difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
-            languageMenuEntry.Selected += LanguageMenuEntrySelected;
-            buttonLayoutMenuEntry.Selected += ButtonLayoutMenuEntrySelected;
-            thumbstickLayoutMenuEntry.Selected += ThumbStickLayoutMenuEntrySelected;
+            if (col == 1)
+            {
+                // Hook up menu event handlers.
+                difficultyMenuEntry.Selected += DifficultyMenuEntrySelected;
+                languageMenuEntry.Selected += LanguageMenuEntrySelected;
+                buttonLayoutMenuEntry.Selected += ButtonLayoutMenuEntrySelected;
+                thumbstickLayoutMenuEntry.Selected += ThumbStickLayoutMenuEntrySelected;
 
-            //frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
-            //elfMenuEntry.Selected += ElfMenuEntrySelected;
-            backMenuEntry.Selected += OnCancel;
+                //frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
+                //elfMenuEntry.Selected += ElfMenuEntrySelected;
+                backMenuEntry.Selected += OnCancel;
+            }
             
             // Add entries to the menu.
             MenuEntries.Add(languageMenuEntry);
@@ -134,6 +143,36 @@ namespace ProjectStella
         #endregion
 
         #region Handle Input
+
+        public override void  HandleInput(InputState input)
+        {
+            if(col == 1)
+ 	            base.HandleInput(input);
+
+             // Look up inputs for the active player profile.
+             int playerIndex = (int)ControllingPlayer.Value;
+
+             keyboardState = input.CurrentKeyboardStates[playerIndex];
+
+             if (oldKeyboardState.IsKeyUp(Keys.E) && keyboardState.IsKeyDown(Keys.E))
+             {
+                 col++;
+                 SetMenuEntryText();
+             }
+             if (oldKeyboardState.IsKeyUp(Keys.Q) && keyboardState.IsKeyDown(Keys.Q))
+             {
+                 col--;
+                 SetMenuEntryText();
+             }
+
+             if (col > 2 || col < 1)
+             {
+                 col = 1;
+                 SetMenuEntryText();
+             }
+
+             oldKeyboardState = keyboardState;
+        }
 
         /// <summary>
         /// Event handler for when the Difficulty menu entry is selected.

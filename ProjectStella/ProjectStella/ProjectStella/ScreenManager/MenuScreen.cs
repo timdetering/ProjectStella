@@ -194,7 +194,7 @@ namespace ProjectStella
             // Make the menu slide into place during transitions, using a
             // power curve to make things look more interesting (this makes
             // the movement slow down as it nears the end).
-            transitionOffset = (float)Math.Pow(TransitionPosition, 2);
+           // transitionOffset = (float)Math.Pow(TransitionPosition, 2);
 
             Vector2 position = new Vector2(75f, 500f);
 
@@ -277,6 +277,8 @@ namespace ProjectStella
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
             SpriteFont font = ScreenManager.Font;
 
+            bool backgroundDrawn = true;
+
             spriteBatch.Begin();
 
             // Draw each menu entry in turn.
@@ -286,9 +288,12 @@ namespace ProjectStella
 
                 bool isSelected = IsActive && (i == selectedEntry);
 
-                // Code for a background on the main menu entries
-                if (menuType == "MainMenu")
-                    spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this)), new Color(0, 0, 0, .9f));
+                if (backgroundDrawn && menuType == "MainMenu")
+                {
+                    spriteBatch.Draw(menuEntryBackground, new Rectangle((int)menuEntry.Position.X - 5, (int)menuEntry.Position.Y - 15, 200, menuEntry.GetHeight(this) * menuEntries.Count), new Color(0, 0, 0, .9f));
+                    backgroundDrawn = false;
+                }
+
                 menuEntry.Draw(this, isSelected, gameTime, menuType);
             }
 

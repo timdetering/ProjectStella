@@ -26,8 +26,6 @@ namespace ProjectStella
 
         SpriteFont font;
 
-       
-
         #endregion
 
         #region Initialize

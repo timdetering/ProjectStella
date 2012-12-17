@@ -179,9 +179,16 @@ namespace ProjectStella
                 // Animate the number of dots afer "Loading" message.
                 loadAnimationTimer += gameTime.ElapsedGameTime;
 
-                int dotCount = (int)(loadAnimationTimer.TotalSeconds * 2) % 4;
+                if (message == "Loading")
+                {
+                    int dotCount = (int)(loadAnimationTimer.TotalSeconds * 2) % 4;
 
-                message += new string('.', dotCount);
+                    message += new string('.', dotCount);
+                }
+                else if (GameplayScreen.contentLoaded)
+                {
+                    message += "Done";
+                }
 
                 // Draw the text.
                 spriteBatch.Begin();
