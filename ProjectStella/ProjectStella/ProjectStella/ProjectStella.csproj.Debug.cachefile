@@ -98,6 +98,15 @@ Content\Ships\ship2_c_0.xnb
 Content\Ships\ship2_i_0.xnb
 Content\Ships\ship2_s_0.xnb
 Content\Ships\ship2_n_0.xnb
+Content\Skybox\back.xnb
+Content\Skybox\down.xnb
+Content\Skybox\front.xnb
+Content\Skybox\left.xnb
+Content\Skybox\right.xnb
+Content\Skybox\up.xnb
+Content\Skybox\cube.xnb
+Content\Skybox\SkyboxEffect.xnb
+Content\Skybox\SkyBox.xnb
 Content\Sounds\sounds.xgs
 Content\Sounds\Wave Bank.xwb
 Content\Sounds\Sound Bank.xsb

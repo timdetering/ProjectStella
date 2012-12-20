@@ -72,7 +72,7 @@ namespace ProjectStella
             graphics.SynchronizeWithVerticalRetrace = renderVsync;
 
             // Create the screen manager component.
-            screenManager = new ScreenManager(this,font, game);
+            screenManager = new ScreenManager(this,font, game, graphics);
 
             Components.Add(screenManager);
 
