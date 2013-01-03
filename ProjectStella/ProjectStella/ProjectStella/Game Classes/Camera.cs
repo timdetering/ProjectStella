@@ -33,7 +33,7 @@ namespace ProjectStella
         private Vector3 position;
         private Vector3 target;
         public Matrix viewMatrix;
-        public Matrix projectionMatrix= Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f,0.1f, 100f);
+         public Matrix projectionMatrix= Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), 400f / 300f,0.1f,500f);
 
         private float yaw, pitch, roll;
         private float speed;
@@ -81,13 +81,13 @@ namespace ProjectStella
             // Rotate Camera Right and Left
             if (gamePad.ThumbSticks.Right.X > 0.1f || gamePad.ThumbSticks.Right.X < -0.1f)
             {
-                yaw += .01f * -gamePad.ThumbSticks.Right.X;
+                yaw += .02f * -gamePad.ThumbSticks.Right.X;
             }
 
             // Rotate Camera Up and Down
             if (gamePad.ThumbSticks.Right.Y > 0.1f || gamePad.ThumbSticks.Right.Y < -0.1f)
             {
-                pitch += .01f * gamePad.ThumbSticks.Right.Y;
+                pitch += .02f * gamePad.ThumbSticks.Right.Y;
             }
 
             // Roll Camera Left
@@ -102,21 +102,21 @@ namespace ProjectStella
             }
            
 
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (gamePad.ThumbSticks.Left.Y > 0.1f)
             {
                 MoveCamera(cameraRotation.Forward);
             }
-            if (keyboardState.IsKeyDown(Keys.S))
+            if (gamePad.ThumbSticks.Left.Y  < -0.1f)
             {
                 MoveCamera(-cameraRotation.Forward);
             }
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                MoveCamera(-cameraRotation.Right);
-            }
-            if (keyboardState.IsKeyDown(Keys.D))
+            if (gamePad.ThumbSticks.Left.X > 0.1f)
             {
                 MoveCamera(cameraRotation.Right);
+            }
+            if (gamePad.ThumbSticks.Left.X < -0.1f)
+            {
+                MoveCamera(-cameraRotation.Right);
             }
             if (keyboardState.IsKeyDown(Keys.E))
             {

@@ -65,8 +65,8 @@ namespace ProjectStella
 
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
-            graphics.IsFullScreen = false;
-            graphics.PreferMultiSampling = true;
+            graphics.IsFullScreen = true;
+            //graphics.PreferMultiSampling = true;
 
             IsFixedTimeStep = renderVsync;
             graphics.SynchronizeWithVerticalRetrace = renderVsync;
