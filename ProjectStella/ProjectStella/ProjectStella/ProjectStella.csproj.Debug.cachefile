@@ -51,6 +51,12 @@ Content\Screens\player2_wins.xnb
 Content\Screens\rotate_ship.xnb
 Content\Screens\select_back.xnb
 Content\Screens\select_cancel.xnb
+Content\Skybox\back.xnb
+Content\Skybox\down.xnb
+Content\Skybox\front.xnb
+Content\Skybox\left.xnb
+Content\Skybox\right.xnb
+Content\Skybox\up.xnb
 Content\Sounds\UI\click.xnb
 Content\Sounds\UI\scroll.xnb
 Content\Sounds\fire_primary.xnb
@@ -77,10 +83,12 @@ Content\Ships\pad_halo.xnb
 Content\Ships\pad_select.xnb
 Content\Ships\ship1.xnb
 Content\Ships\ship2.xnb
+Content\Skybox\cube.xnb
 Content\Shaders\AnimSprite.xnb
 Content\Shaders\Blur.xnb
 Content\Shaders\NormalMapping.xnb
 Content\Shaders\Particle.xnb
+Content\Skybox\SkyboxEffect.xnb
 Content\Ships\pad_c_0.xnb
 Content\Ships\pad_i_0.xnb
 Content\Ships\pad_s_0.xnb
@@ -98,14 +106,6 @@ Content\Ships\ship2_c_0.xnb
 Content\Ships\ship2_i_0.xnb
 Content\Ships\ship2_s_0.xnb
 Content\Ships\ship2_n_0.xnb
-Content\Skybox\back.xnb
-Content\Skybox\down.xnb
-Content\Skybox\front.xnb
-Content\Skybox\left.xnb
-Content\Skybox\right.xnb
-Content\Skybox\up.xnb
-Content\Skybox\cube.xnb
-Content\Skybox\SkyboxEffect.xnb
 Content\Skybox\SkyBox.xnb
 Content\Sounds\sounds.xgs
 Content\Sounds\Wave Bank.xwb

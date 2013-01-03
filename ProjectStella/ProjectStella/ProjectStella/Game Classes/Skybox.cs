@@ -43,7 +43,7 @@ namespace ProjectStella
         /// <param name="view">View matrix for skybox effect</param>
         /// <param name="projection">Projection matrix for the effect</param>
         /// <param name="cameraPosition">Position of the camera.</param>
-        public void Draw(Matrix view, Matrix projection, Vector3 cameraPosition)
+        public void Draw(Matrix view, Matrix projection, Camera camera)
         {
             // Go through each pass in the effect.
             foreach (EffectPass pass in skyBoxEffect.CurrentTechnique.Passes)
@@ -55,11 +55,11 @@ namespace ProjectStella
                     foreach (ModelMeshPart part in mesh.MeshParts)
                     {
                         part.Effect = skyBoxEffect;
-                        part.Effect.Parameters["World"].SetValue(Matrix.CreateScale(scale) * Matrix.CreateTranslation(cameraPosition));
-                        part.Effect.Parameters["View"].SetValue(view);
-                        part.Effect.Parameters["Projection"].SetValue(projection);
+                        part.Effect.Parameters["World"].SetValue(Matrix.CreateScale(scale) * Matrix.CreateTranslation(camera.Position));
+                        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
                         part.Effect.Parameters["SkyBoxTexture"].SetValue(skyBoxTexture);
-                        part.Effect.Parameters["CameraPosition"].SetValue(cameraPosition);
+                        part.Effect.Parameters["CameraPosition"].SetValue(camera.Position);
                     }
 
                     // Draw the mesh with the skybox effect.

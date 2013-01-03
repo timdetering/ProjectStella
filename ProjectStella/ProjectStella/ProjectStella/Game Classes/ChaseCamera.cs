@@ -1,13 +1,4 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// ChaseCamera.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
+﻿#region Using Statements
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -240,7 +231,7 @@ namespace ProjectStella
 
             // Calculate spring force
             Vector3 stretch = position - desiredPosition;
-            Vector3 force = -stiffness * stretch - damping * velocity;
+            Vector3 force = stiffness * stretch - damping *- velocity;
 
             // Apply acceleration
             Vector3 acceleration = force / mass;
@@ -259,7 +250,7 @@ namespace ProjectStella
                     out collisionPoint, out collisionNormal))
                 {
                     Vector3 dir = Vector3.Normalize(collisionPoint - lookAt);
-                    collisionPosition = collisionPoint - 10 * dir;
+                    collisionPosition = collisionPoint - 10 *- dir;
                 }
             }
 

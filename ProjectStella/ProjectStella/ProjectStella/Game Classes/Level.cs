@@ -28,14 +28,15 @@ namespace ProjectStella
 
         Skybox skybox;
 
+        Camera camera = new Camera();
+
         // Creates matrixes for 3d
         Matrix world = Matrix.Identity;
         Matrix view = Matrix.CreateLookAt(new Vector3(20, 0, 0), new Vector3(0, 0, 0), Vector3.UnitY);
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f,0.1f, 100f);
 
-        Vector3 cameraPosition;
-        float angle = 0;
-        float distance = 30;
+        GamePadState gamePadState;
+        GamePadState oldGamePadState;
 
         #endregion
 
@@ -69,7 +70,7 @@ namespace ProjectStella
         /// </summary>
         public void UnloadContent()
         {
-            //content.Dispose();   
+            content.Dispose();   
         }
 
         #endregion
@@ -81,9 +82,22 @@ namespace ProjectStella
         /// </summary>
         public void Update(GameTime gameTime)
         {
-            angle += 0.002f;
-            cameraPosition = distance * new Vector3((float)Math.Sin(angle), 0, (float)Math.Cos(angle));
-            view = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.UnitY);
+            gamePadState = GamePad.GetState(PlayerIndex.One);
+
+            HandleInput();
+
+            camera.Update();
+
+
+            //cameraPosition = distance * new Vector3((float)Math.Sin(angle), angle2, (float)Math.Cos(angle));
+            //view = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.UnitY);
+
+            oldGamePadState = gamePadState;
+        }
+
+        public void HandleInput()
+        {
+
         }
 
         #endregion
@@ -99,7 +113,8 @@ namespace ProjectStella
             rasterizerState.CullMode = CullMode.None;
             screenManager.graphics.GraphicsDevice.RasterizerState = rasterizerState;
 
-            skybox.Draw(view, projection, cameraPosition);
+            // Draws the skybox.
+            skybox.Draw(view, projection, camera);
 
             screenManager.graphics.GraphicsDevice.RasterizerState = originalRasterizerState;
         }

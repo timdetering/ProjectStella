@@ -77,9 +77,10 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game Classes\Camera.cs" />
+    <Compile Include="Game Classes\ChaseCamera.cs" />
     <Compile Include="Game Classes\Skybox.cs" />
     <Compile Include="Screens\ButtonLayoutScreen.cs" />
-    <Compile Include="Game Classes\ChaseCamera.cs" />
     <Compile Include="Game Classes\EntityList.cs" />
     <Compile Include="Game Classes\FontManager.cs" />
     <Compile Include="Game Classes\GameManager.cs" />
