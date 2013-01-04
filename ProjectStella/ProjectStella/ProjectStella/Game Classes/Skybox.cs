@@ -20,7 +20,7 @@ namespace ProjectStella
 
         // The effect file that the skybox will use to render.
         private Effect skyBoxEffect;
-
+        
         // The size of the cube that we can use to resize the box
         // for different sized environments.
         private float scale = 1f;

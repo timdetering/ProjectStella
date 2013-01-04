@@ -66,9 +66,10 @@ namespace ProjectStella
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
             //graphics.PreferMultiSampling = true;
+         //graphics.IsFullScreen = true;
 
-            IsFixedTimeStep = renderVsync;
-            graphics.SynchronizeWithVerticalRetrace = renderVsync;
+            //IsFixedTimeStep = renderVsync;
+            //graphics.SynchronizeWithVerticalRetrace = renderVsync;
 
             // Create the screen manager component.
             screenManager = new ScreenManager(this,font, game, graphics);

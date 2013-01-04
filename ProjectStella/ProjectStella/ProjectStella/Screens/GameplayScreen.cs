@@ -169,7 +169,7 @@ namespace ProjectStella
             // Our player and enemy are both actually just text strings.
             SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
 
-            level.Draw(spriteBatch);
+            level.Draw(spriteBatch, gameTime);
 
             // If the game is transitioning on or off, fade it out to black.
             if (TransitionPosition > 0 || pauseAlpha > 0)

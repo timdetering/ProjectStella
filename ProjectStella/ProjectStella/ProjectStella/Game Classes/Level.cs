@@ -19,6 +19,11 @@ namespace ProjectStella
     {
         #region Fields
 
+        int frameRate;
+        int frameCounter;
+        TimeSpan elapsedTime;
+
+
         public struct WorldObject
         {
             public Vector3 position;
@@ -75,7 +80,7 @@ namespace ProjectStella
 
         public void Initialize()
         {
-            numOfWorldObjects = rand.Next(1, 100);
+            numOfWorldObjects = rand.Next(100, 100);
             
             worldObjects = new WorldObject[numOfWorldObjects];
 
@@ -138,6 +143,17 @@ namespace ProjectStella
             camera.Update();
 
             oldGamePadState = gamePadState;
+
+            // Measure our framerate.
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                frameRate = frameCounter;
+                frameCounter = 0;
+            } 
+
         }
 
         public void HandleInput()
@@ -149,11 +165,10 @@ namespace ProjectStella
 
         #region Draw
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             screenManager.GraphicsDevice.Clear(Color.Black);
 
-            
             RasterizerState originalRasterizerState = screenManager.graphics.GraphicsDevice.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
@@ -163,12 +178,17 @@ namespace ProjectStella
             //Draws the skybox.
             skybox.Draw(view, projection, camera);
 
-            
             screenManager.graphics.GraphicsDevice.RasterizerState = originalRasterizerState;
-
 
             BlendState bs = screenManager.GraphicsDevice.BlendState;
             DepthStencilState ds = screenManager.GraphicsDevice.DepthStencilState;
+
+            RasterizerState originalState = screenManager.GraphicsDevice.RasterizerState;
+            
+            RasterizerState rs = new RasterizerState();
+            rs.FillMode = FillMode.WireFrame;
+            screenManager.GraphicsDevice.RasterizerState = rs;
+             
 
             screenManager.GraphicsDevice.BlendState = BlendState.Opaque;
             screenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
@@ -184,6 +204,13 @@ namespace ProjectStella
 
             screenManager.GraphicsDevice.BlendState = bs;
             screenManager.GraphicsDevice.DepthStencilState = ds;
+            screenManager.graphics.GraphicsDevice.RasterizerState = originalState;
+
+            spriteBatch.Begin();
+            spriteBatch.DrawString(screenManager.Font, frameRate.ToString(), Vector2.Zero, Color.White);
+            spriteBatch.End();
+
+            frameCounter++;
         }
 
         void DrawModel(Model model, Matrix world, Texture2D texture)
@@ -198,7 +225,7 @@ namespace ProjectStella
                     be.View = camera.ViewMatrix;
                     be.World = world;
                     be.Texture = texture;
-                    be.TextureEnabled = true;
+                    //be.TextureEnabled = true;
                 }
                 mesh.Draw();
             }
