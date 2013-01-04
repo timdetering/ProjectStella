@@ -297,9 +297,9 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="sphere.x">
+    <Compile Include="sphere.fbx">
       <Name>sphere</Name>
-      <Importer>XImporter</Importer>
+      <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
     <Compile Include="Skybox\SkyBox.dds">
@@ -307,7 +307,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <ProcessorParameters_PremultiplyAlpha>False</ProcessorParameters_PremultiplyAlpha>
-      <ProcessorParameters_ColorKeyColor>255, 255, 255, 255</ProcessorParameters_ColorKeyColor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -532,38 +531,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Skybox\back.bmp">
-      <Name>back</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Skybox\down.bmp">
-      <Name>down</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Skybox\front.bmp">
-      <Name>front</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Skybox\left.bmp">
-      <Name>left</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Skybox\right.bmp">
-      <Name>right</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Skybox\up.bmp">
-      <Name>up</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Skybox\SkyboxEffect.fx">
       <Name>SkyboxEffect</Name>
       <Importer>EffectImporter</Importer>
@@ -571,17 +538,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="selectedtexture.bmp">
-      <Name>selectedtexture</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="unselectedtexture.bmp">
+    <Compile Include="unselectedtexture.png">
       <Name>unselectedtexture</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_ColorKeyColor>255, 255, 255, 255</ProcessorParameters_ColorKeyColor>
+      <ProcessorParameters_PremultiplyAlpha>False</ProcessorParameters_PremultiplyAlpha>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

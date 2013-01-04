@@ -33,7 +33,7 @@ namespace ProjectStella
         private Vector3 position;
         private Vector3 target;
         public Matrix viewMatrix;
-         public Matrix projectionMatrix= Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(90), 400f / 300f,0.1f,500f);
+         public Matrix projectionMatrix= Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(55), 400f / 300f,0.1f,500f);
 
         private float yaw, pitch, roll;
         private float speed;

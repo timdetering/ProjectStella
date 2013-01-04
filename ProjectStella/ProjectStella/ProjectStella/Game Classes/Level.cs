@@ -68,12 +68,14 @@ namespace ProjectStella
             this.screenManager = screenManager;
             this.gameManager = screenManager.gameManager;
 
+            screenManager.graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
             Initialize();
         }
 
         public void Initialize()
         {
-            numOfWorldObjects = rand.Next(1, 10000);
+            numOfWorldObjects = rand.Next(1, 100);
             
             worldObjects = new WorldObject[numOfWorldObjects];
 
@@ -135,10 +137,6 @@ namespace ProjectStella
 
             camera.Update();
 
-
-            //cameraPosition = distance * new Vector3((float)Math.Sin(angle), angle2, (float)Math.Cos(angle));
-            //view = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.UnitY);
-
             oldGamePadState = gamePadState;
         }
 
@@ -155,24 +153,37 @@ namespace ProjectStella
         {
             screenManager.GraphicsDevice.Clear(Color.Black);
 
+            
             RasterizerState originalRasterizerState = screenManager.graphics.GraphicsDevice.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
             screenManager.graphics.GraphicsDevice.RasterizerState = rasterizerState;
+             
 
-            // Draws the skybox.
+            //Draws the skybox.
             skybox.Draw(view, projection, camera);
 
+            
             screenManager.graphics.GraphicsDevice.RasterizerState = originalRasterizerState;
-            screenManager.graphics.GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
+
+
+            BlendState bs = screenManager.GraphicsDevice.BlendState;
+            DepthStencilState ds = screenManager.GraphicsDevice.DepthStencilState;
+
+            screenManager.GraphicsDevice.BlendState = BlendState.Opaque;
+            screenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             for (int i = 0; i < worldObjects.Length; i++)
             {
                 Matrix world =
                     Matrix.CreateTranslation(worldObjects[i].position);
+
                 DrawModel(worldObjects[i].model, world,
                     worldObjects[i].texture2D);
             }
+
+            screenManager.GraphicsDevice.BlendState = bs;
+            screenManager.GraphicsDevice.DepthStencilState = ds;
         }
 
         void DrawModel(Model model, Matrix world, Texture2D texture)
@@ -181,6 +192,8 @@ namespace ProjectStella
             {
                 foreach (BasicEffect be in mesh.Effects)
                 {
+                    be.EnableDefaultLighting();
+                    be.PreferPerPixelLighting = true;
                     be.Projection = camera.ProjectionMatrix;
                     be.View = camera.ViewMatrix;
                     be.World = world;
