@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System.Globalization;
 using System.Threading;
 using System;
+using Microsoft.Xna.Framework.Media;
 #endregion
 
 namespace ProjectStella
@@ -110,6 +111,7 @@ namespace ProjectStella
         {
             LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
                                                            new MainMenuScreen());
+            MediaPlayer.Stop();
         }
 
         #endregion

@@ -25,8 +25,6 @@ namespace ProjectStella
 
         InputState input = new InputState();
 
-        public GameManager gameManager;
-        public FontManager fontManager;
         public GraphicsDeviceManager graphics;
 
         SpriteBatch spriteBatch;
@@ -88,12 +86,10 @@ namespace ProjectStella
         /// <summary>
         /// Constructs a new screen manager component.
         /// </summary>
-        public ScreenManager(Game game, FontManager font, GameManager gameManager, GraphicsDeviceManager graphics)
+        public ScreenManager(Game game, GraphicsDeviceManager graphics)
             : base(game)
         {
             this.graphics = graphics;
-            this.fontManager = font;
-            this.gameManager = gameManager;
         }
 
 

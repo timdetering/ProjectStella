@@ -19,47 +19,71 @@ namespace ProjectStella
     {
         #region Fields
 
+        bool debugOn = false;
+
         int frameRate;
         int frameCounter;
         TimeSpan elapsedTime;
 
-
-        public struct WorldObject
-        {
-            public Vector3 position;
-            public Model model;
-            public Texture2D texture2D;
-        }
-
-        WorldObject[] worldObjects;
+        List<WorldObject> worldObjects;
 
         ContentManager content;
-
         ScreenManager screenManager;
-        GameManager gameManager;
-
         SpriteFont font;
-
         Skybox skybox;
+
+        Texture2D blankTexture;
+
+        TimeSpan fireRate = TimeSpan.FromSeconds(.25f);
+        TimeSpan previousShot = TimeSpan.Zero;
+
+        Effect effect;
+
+        List<Bullet> bullets;
+
+        Texture2D crossHair;
 
         Model sphere;
         Texture2D sphereTexture;
 
+        Model ship;
+        Texture2D shipTexture;
+        PlayerShip player;
+
+        int messageDisplayTime = 0;
+
+        Texture2D bulletSprite;
+
         Camera camera = new Camera();
         Random rand = new Random();
 
+        int immuneCounter = 0;
+
         int numOfWorldObjects;
-        int worldX;
-        int worldY;
-        int worldZ;
 
         // Creates matrixes for 3d
         Matrix world = Matrix.Identity;
-        Matrix view = Matrix.CreateLookAt(new Vector3(20, 0, 0), new Vector3(0, 0, 0), Vector3.UnitY);
-        Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f,0.1f, 100f);
 
         GamePadState gamePadState;
         GamePadState oldGamePadState;
+
+        Vector3 bowOffset = new Vector3(0, 0, 5);
+
+        BoundingSphere sphere1;
+
+        SoundEffect primarySound;
+        SoundEffectInstance primaryInstance;
+
+        bool thirdPersonOn = false;
+        bool overHeated = false;
+        bool bulletsHitting = false;
+
+        float heat = 0;
+        int k = 1;
+
+        Color heatColor;
+
+        SoundEffect explosion;
 
         #endregion
 
@@ -71,30 +95,15 @@ namespace ProjectStella
         public Level(ScreenManager screenManager)
         {
             this.screenManager = screenManager;
-            this.gameManager = screenManager.gameManager;
 
-            screenManager.graphics.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            screenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
             Initialize();
         }
 
         public void Initialize()
         {
-            numOfWorldObjects = rand.Next(100, 100);
-            
-            worldObjects = new WorldObject[numOfWorldObjects];
 
-            for (int i = 0; i < worldObjects.Length; i++)
-            {
-                worldX = rand.Next(-100, 100);
-                worldY = rand.Next(-100, 100);
-                worldZ = rand.Next(-100, 100);
-
-                worldObjects[i] = new WorldObject();
-                worldObjects[i].model = sphere;
-                worldObjects[i].position = new Vector3(worldX,worldY, worldZ);
-                worldObjects[i].texture2D = sphereTexture;
-            }
         }
 
         /// <summary>
@@ -102,29 +111,83 @@ namespace ProjectStella
         /// </summary>
         public void LoadContent()
         {
-            if(content == null)
+            if (content == null)
                 content = new ContentManager(screenManager.Game.Services, "Content");
 
             skybox = new Skybox(content);
 
             font = content.Load<SpriteFont>("Fonts/gameFont");
 
-            sphere = content.Load<Model>("sphere");
-            sphereTexture = content.Load<Texture2D>("unselectedtexture");
-            for (int i = 0; i < worldObjects.Length; i++)
-            {
-                worldObjects[i].model = sphere;
-                worldObjects[i].texture2D = sphereTexture;
-            }
-        }
+            bulletSprite = content.Load<Texture2D>("bulletSprite");
 
+            crossHair = content.Load<Texture2D>("crosshair");
+
+            // Texture and model for ship.
+            ship = content.Load<Model>("spaceship");
+            shipTexture = content.Load<Texture2D>("interceptormap2");
+
+            primarySound = content.Load<SoundEffect>("lasershot");
+
+            blankTexture = content.Load<Texture2D>("whiteText");
+
+            effect = content.Load<Effect>("effects");
+
+            // Texture and model for asteroids.
+            sphere = content.Load<Model>("sphere");
+            sphereTexture = content.Load<Texture2D>("AM1");
+
+            explosion = content.Load<SoundEffect>("Explo4");
+
+            player = new PlayerShip(ship, shipTexture, 60);
+
+            numOfWorldObjects = rand.Next(500, 500);
+            worldObjects = new List<WorldObject>();
+
+            for (int i = 0; i < numOfWorldObjects; i++)
+            {
+                int worldX = rand.Next(-500, 500);
+                int worldY = rand.Next(-500, 500);
+                int worldZ = rand.Next(-500, 500);
+                int rotX = rand.Next(1, 50);
+                int rotY = rand.Next(1, 50);
+                int rotZ = rand.Next(1, 50);
+                int moving = rand.Next(2,2 );
+                float scale;
+                Vector3 direction;
+
+
+                if (moving == 2)
+                    direction = new Vector3(rand.Next(-1, 1), rand.Next(-1, 1), rand.Next(-1, 1));
+                else
+                    direction = new Vector3(0, 0, 0);
+
+                float scaleChance = rand.Next(1, 100);
+
+                if (scaleChance > 90)
+                    scale = rand.Next(75, 100);
+                else if (scaleChance > 75)
+                    scale = rand.Next(35, 75);
+                else if (scaleChance > 50)
+                    scale = rand.Next(10, 35);
+                else
+                    scale = rand.Next(1, 10);
+
+                Vector3 position = new Vector3(worldX, worldY, worldZ);
+
+                worldObjects.Add(new WorldObject(sphere, sphereTexture, position, scale, rotX, rotY, rotZ, direction));
+            }
+
+            bullets = new List<Bullet>();
+
+            primaryInstance = primarySound.CreateInstance();
+        }
 
         /// <summary>
         /// Disposes of the content when gameplay screen exits.
         /// </summary>
         public void UnloadContent()
         {
-            content.Dispose();   
+            content.Dispose();
         }
 
         #endregion
@@ -138,9 +201,76 @@ namespace ProjectStella
         {
             gamePadState = GamePad.GetState(PlayerIndex.One);
 
-            HandleInput();
+            HandleInput(gameTime);
 
-            camera.Update();
+            player.Update();
+            camera.Update(player, thirdPersonOn);
+
+            immuneCounter--;
+
+            for(int i = 0; i < bullets.Count; i++)
+                bullets[i].Update();
+                
+
+            for (int i = 0; i < worldObjects.Count; i++)
+            {
+                worldObjects[i].Update(gameTime);
+
+                if (ShipCollision(ship, sphere, player.World, worldObjects[i].World))
+                {
+                    if (immuneCounter < 0)
+                    {
+                        player.Reset();
+                        immuneCounter = 300;
+                        messageDisplayTime = 300;
+                        explosion.Play();
+                    }
+                }
+                if (k < worldObjects.Count)
+                {
+
+                    if (ShipCollision(sphere, sphere, worldObjects[k].World, worldObjects[i].World))
+                    {
+                        frameRate = 1000;
+                        worldObjects[i].ReverseDirection();
+                        worldObjects[k].ReverseDirection();
+                    }
+                    k++;
+                }
+                else
+                    k = 0;
+
+
+                for (int j = 0; j < bullets.Count; j++)
+                {
+                    BoundingSphere bulletSphere = new BoundingSphere(bullets[j].Position, 5f);
+
+                    for (int meshIndex1 = 0; meshIndex1 < sphere.Meshes.Count; meshIndex1++)
+                    {
+                        sphere1 = sphere.Meshes[meshIndex1].BoundingSphere;
+                        sphere1 = sphere1.Transform(worldObjects[i].World);
+
+                        if (BulletCollision(bulletSphere, sphere1))
+                        {
+                            bullets[j].IsAlive = false;
+                            worldObjects[i].Health -= bullets[j].Damage;
+                            bulletsHitting = true;
+                        }
+                        else
+                            bulletsHitting = false;
+                    }
+
+                    if (bullets[j].IsAlive != true)
+                    {
+                        bullets.RemoveAt(j);
+                    }
+                }
+
+                if (worldObjects[i].IsAlive != true)
+                    worldObjects.RemoveAt(i);
+            }
+
+            HandleHeat();
 
             oldGamePadState = gamePadState;
 
@@ -156,9 +286,83 @@ namespace ProjectStella
 
         }
 
-        public void HandleInput()
+        private void HandleHeat()
+        {
+            if (heat >= 100 && overHeated == false)
+                overHeated = true;
+
+            if (overHeated == true)
+                heat -= 0.2f;
+            else
+                heat -= 0.05f;
+
+            if (overHeated == true)
+                heatColor = Color.Red;
+            else if (heat >= 75)
+                heatColor = Color.OrangeRed;
+            else if (heat >= 50)
+                heatColor = Color.Orange;
+            else if (heat >= 25)
+                heatColor = Color.Yellow;
+            else
+                heatColor = Color.Green;
+
+            if (heat <= 0)
+            {
+                overHeated = false;
+                heat = 0;
+            }
+        }
+
+        private bool ShipCollision(Model model1, Model model2, Matrix world1, Matrix world2)
+        {
+            for (int meshIndex1 = 0; meshIndex1 < model1.Meshes.Count; meshIndex1++)
+            {
+                BoundingSphere sphere1 = model1.Meshes[meshIndex1].BoundingSphere;
+                sphere1 = sphere1.Transform(world1);
+
+                for (int meshIndex2 = 0; meshIndex2 < model2.Meshes.Count; meshIndex2++)
+                {
+                    BoundingSphere sphere2 = model2.Meshes[meshIndex2].BoundingSphere;
+                    sphere2 = sphere2.Transform(world2);
+
+                    if (sphere1.Intersects(sphere2))
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private bool BulletCollision(BoundingSphere sphere1, BoundingSphere sphere2)
         {
 
+            if (sphere1.Intersects(sphere2))
+                return true;
+            return false;
+        }
+
+        public void HandleInput(GameTime gameTime)
+        {
+            if (gamePadState.Buttons.LeftStick == ButtonState.Pressed && debugOn == false)
+                debugOn = true;
+            else if (gamePadState.Buttons.RightStick == ButtonState.Pressed && debugOn == true)
+                debugOn = false;
+
+            if (gamePadState.Triggers.Right > 0.1f && gameTime.TotalGameTime - previousShot >= fireRate && overHeated == false)
+            {
+                bullets.Add(new Bullet(player.Position + player.World.Right * 5, player.Rotation, bulletSprite, camera, effect, screenManager));
+                bullets.Add(new Bullet(player.Position + player.World.Left * 5, player.Rotation, bulletSprite, camera, effect, screenManager));
+                previousShot = gameTime.TotalGameTime;
+                primarySound.Play(.15f, 0, 0);
+
+                heat += 2;
+            }
+
+            if (gamePadState.DPad.Right == ButtonState.Pressed && oldGamePadState.DPad.Right == ButtonState.Pressed && thirdPersonOn == false)
+                thirdPersonOn = true;
+
+            if (gamePadState.DPad.Left == ButtonState.Pressed && oldGamePadState.DPad.Left == ButtonState.Pressed && thirdPersonOn == true)
+                thirdPersonOn = false;
         }
 
         #endregion
@@ -172,11 +376,12 @@ namespace ProjectStella
             RasterizerState originalRasterizerState = screenManager.graphics.GraphicsDevice.RasterizerState;
             RasterizerState rasterizerState = new RasterizerState();
             rasterizerState.CullMode = CullMode.None;
+
             screenManager.graphics.GraphicsDevice.RasterizerState = rasterizerState;
-             
+
 
             //Draws the skybox.
-            skybox.Draw(view, projection, camera);
+            skybox.Draw(camera);
 
             screenManager.graphics.GraphicsDevice.RasterizerState = originalRasterizerState;
 
@@ -184,51 +389,70 @@ namespace ProjectStella
             DepthStencilState ds = screenManager.GraphicsDevice.DepthStencilState;
 
             RasterizerState originalState = screenManager.GraphicsDevice.RasterizerState;
-            
-            RasterizerState rs = new RasterizerState();
-            rs.FillMode = FillMode.WireFrame;
-            screenManager.GraphicsDevice.RasterizerState = rs;
-             
+
+            if (debugOn)
+            {
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                screenManager.GraphicsDevice.RasterizerState = rs;
+            }
+
 
             screenManager.GraphicsDevice.BlendState = BlendState.Opaque;
             screenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-            for (int i = 0; i < worldObjects.Length; i++)
+            
+            for (int i = 0; i < bullets.Count; i++)
             {
-                Matrix world =
-                    Matrix.CreateTranslation(worldObjects[i].position);
-
-                DrawModel(worldObjects[i].model, world,
-                    worldObjects[i].texture2D);
+                bullets[i].Draw();
             }
+
+            for (int j = 0; j < worldObjects.Count; j++)
+            {
+                worldObjects[j].Draw(camera, debugOn);
+            }
+
+            player.Draw(camera, debugOn);
+
 
             screenManager.GraphicsDevice.BlendState = bs;
             screenManager.GraphicsDevice.DepthStencilState = ds;
-            screenManager.graphics.GraphicsDevice.RasterizerState = originalState;
+
+
+
+            if (debugOn)
+                screenManager.graphics.GraphicsDevice.RasterizerState = originalState;
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(screenManager.Font, frameRate.ToString(), Vector2.Zero, Color.White);
+
+            if(debugOn == false && thirdPersonOn == false)
+                spriteBatch.Draw(crossHair, new Vector2(screenManager.GraphicsDevice.Viewport.Width, screenManager.GraphicsDevice.Viewport.Height) / 2, null, Color.White, 0, new Vector2(crossHair.Width, crossHair.Height) / 2, 0.5f,SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(blankTexture, new Rectangle((1280 / 2 - 50), 360 + crossHair.Height / 3, (int)heat , 20), heatColor);
+
+            Vector2 messageLength = font.MeasureString("Watch out for asteroids");
+
+            if (messageDisplayTime > 0)
+            {
+                spriteBatch.DrawString(font, "Watch out for asteroids", new Vector2(screenManager.GraphicsDevice.Viewport.Width - messageLength.X, screenManager.GraphicsDevice.Viewport.Height - messageLength.Y) / 2, Color.White);
+                messageDisplayTime--;
+            }
+
+            if (debugOn)
+                spriteBatch.DrawString(screenManager.Font,
+                    "Debug Menu: \n"
+                    + "FPS: " + frameRate.ToString() + "\n"
+                    + "Asteroids: " + worldObjects.Count.ToString() + "\n"
+                    + "Bullets Active: " + bullets.Count.ToString() + "\n"
+                    + "Third Person On: " + thirdPersonOn.ToString() + "\n"
+                    + "Heat: " + heat.ToString() + "\n"
+                    + "Overheated: " + overHeated.ToString() + "\n"
+                    + "Bullets Colliding: " + bulletsHitting.ToString(), Vector2.Zero, Color.White);
+
+
             spriteBatch.End();
 
             frameCounter++;
-        }
-
-        void DrawModel(Model model, Matrix world, Texture2D texture)
-        {
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                foreach (BasicEffect be in mesh.Effects)
-                {
-                    be.EnableDefaultLighting();
-                    be.PreferPerPixelLighting = true;
-                    be.Projection = camera.ProjectionMatrix;
-                    be.View = camera.ViewMatrix;
-                    be.World = world;
-                    be.Texture = texture;
-                    //be.TextureEnabled = true;
-                }
-                mesh.Draw();
-            }
         }
 
         #endregion

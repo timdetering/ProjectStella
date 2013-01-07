@@ -29,15 +29,29 @@ namespace ProjectStella
             get { return projectionMatrix; }
             set { projectionMatrix = value; }
         }
+        public Matrix CameraRotation
+        {
+            get { return cameraRotation; }
+        }
+        public float Yaw
+        {
+            get { return yaw; }
+        }
+        public float Pitch
+        {
+            get { return pitch; }
+        }
 
         private Vector3 position;
-        private Vector3 target;
+        private Vector3 target = new Vector3();
         public Matrix viewMatrix;
-         public Matrix projectionMatrix= Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(55), 400f / 300f,0.1f,500f);
 
         private float yaw, pitch, roll;
         private float speed;
         private Matrix cameraRotation;
+        private Vector3 offset = new Vector3(0,0,35);
+        private Vector3 cameraReference = new Vector3(0, 0, 0);
+        public Matrix projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f, 0.1f, 5000000f);
 
         #endregion
 
@@ -66,71 +80,29 @@ namespace ProjectStella
         /// <summary>
         /// Updates the camera
         /// </summary>
-        public void Update()
+        public void Update(PlayerShip player, bool thirdPerson)
         {
-            HandleInput();
+
+            switch (thirdPerson)
+            {
+                case true:
+                    position = player.Position + (player.World.Backward * 200) + player.World.Up * 25;
+
+                    break;
+
+                case false:
+                    position = player.Position + (player.World.Forward * 35);
+
+                    break;
+            }
+            cameraRotation = player.Rotation;
+
+            roll = player.Roll;
+            yaw = player.Yaw;
+            pitch = player.Pitch;
+
             UpdateViewMatrix();
-        }
-
-        private void HandleInput()
-        {
-            KeyboardState keyboardState = Keyboard.GetState();
-
-            GamePadState gamePad = GamePad.GetState(PlayerIndex.One);
-
-            // Rotate Camera Right and Left
-            if (gamePad.ThumbSticks.Right.X > 0.1f || gamePad.ThumbSticks.Right.X < -0.1f)
-            {
-                yaw += .02f * -gamePad.ThumbSticks.Right.X;
-            }
-
-            // Rotate Camera Up and Down
-            if (gamePad.ThumbSticks.Right.Y > 0.1f || gamePad.ThumbSticks.Right.Y < -0.1f)
-            {
-                pitch += .02f * gamePad.ThumbSticks.Right.Y;
-            }
-
-            // Roll Camera Left
-            if (gamePad.Buttons.LeftShoulder == ButtonState.Pressed)
-            {
-                roll += -.02f;
-            }
-            // Roll Camera Right
-            if (gamePad.Buttons.RightShoulder == ButtonState.Pressed)
-            {
-                roll += .02f;
-            }
-           
-
-            if (gamePad.ThumbSticks.Left.Y > 0.1f)
-            {
-                MoveCamera(cameraRotation.Forward);
-            }
-            if (gamePad.ThumbSticks.Left.Y  < -0.1f)
-            {
-                MoveCamera(-cameraRotation.Forward);
-            }
-            if (gamePad.ThumbSticks.Left.X > 0.1f)
-            {
-                MoveCamera(cameraRotation.Right);
-            }
-            if (gamePad.ThumbSticks.Left.X < -0.1f)
-            {
-                MoveCamera(-cameraRotation.Right);
-            }
-            if (keyboardState.IsKeyDown(Keys.E))
-            {
-                MoveCamera(cameraRotation.Up);
-            }
-            if (keyboardState.IsKeyDown(Keys.Q))
-            {
-                MoveCamera(-cameraRotation.Up);
-            }
-        }
-
-        private void MoveCamera(Vector3 addedVector)
-        {
-            position += speed * addedVector;
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f, 0.1f, 500000f);
         }
 
         /// <summary>
@@ -151,7 +123,6 @@ namespace ProjectStella
             roll = 0.0f;
 
             target = position + cameraRotation.Forward;
-
             viewMatrix = Matrix.CreateLookAt(position, target, cameraRotation.Up);
         }
     }

@@ -21,8 +21,6 @@ namespace ProjectStella
 
         GraphicsDeviceManager graphics;
         ScreenManager screenManager;
-        GameManager game;
-        FontManager font;
 
         AudioEngine audioEngine;
         WaveBank waveBank;
@@ -61,18 +59,16 @@ namespace ProjectStella
             waveBank = new WaveBank(audioEngine, "content/Sounds/Wave Bank.xwb");
             soundBank = new SoundBank(audioEngine, "content/Sounds/Sound Bank.xsb");
 
-            game = new GameManager(soundBank);
-
             graphics.PreferredBackBufferWidth = GameOptions.ScreenWidth;
             graphics.PreferredBackBufferHeight = GameOptions.ScreenHeight;
-            //graphics.PreferMultiSampling = true;
-         //graphics.IsFullScreen = true;
+            graphics.PreferMultiSampling = true;
+            //graphics.IsFullScreen = true;
 
-            //IsFixedTimeStep = renderVsync;
-            //graphics.SynchronizeWithVerticalRetrace = renderVsync;
+            IsFixedTimeStep = renderVsync;
+            graphics.SynchronizeWithVerticalRetrace = renderVsync;
 
             // Create the screen manager component.
-            screenManager = new ScreenManager(this,font, game, graphics);
+            screenManager = new ScreenManager(this, graphics);
 
             Components.Add(screenManager);
 
@@ -87,8 +83,6 @@ namespace ProjectStella
         /// </summary>
         protected override void LoadContent()
         {
-            font = new FontManager(graphics.GraphicsDevice);
-
             foreach (string asset in preloadAssets)
             {
                 Content.Load<object>(asset);

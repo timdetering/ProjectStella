@@ -23,7 +23,7 @@ namespace ProjectStella
         
         // The size of the cube that we can use to resize the box
         // for different sized environments.
-        private float scale = 1f;
+        private float scale = 5000f;
 
         /// <summary>
         /// Constructor for the skybox.
@@ -43,7 +43,7 @@ namespace ProjectStella
         /// <param name="view">View matrix for skybox effect</param>
         /// <param name="projection">Projection matrix for the effect</param>
         /// <param name="cameraPosition">Position of the camera.</param>
-        public void Draw(Matrix view, Matrix projection, Camera camera)
+        public void Draw(Camera camera)
         {
             // Go through each pass in the effect.
             foreach (EffectPass pass in skyBoxEffect.CurrentTechnique.Passes)

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 #endregion
 
 namespace ProjectStella
@@ -24,6 +25,8 @@ namespace ProjectStella
         Random random = new Random();
 
         Level level;
+
+        Song backgroundMusic;
 
         float pauseAlpha;
 
@@ -54,6 +57,7 @@ namespace ProjectStella
             level.LoadContent();
 
             gameFont = content.Load<SpriteFont>("Fonts/gamefont");
+            backgroundMusic = content.Load<Song>("backgroundMusic");
 
             // A real game would probably have more content than this sample, so
             // it would take longer to load. We simulate that by delaying for a
@@ -100,6 +104,9 @@ namespace ProjectStella
             if (IsActive)
             {
                 level.Update(gameTime);
+
+                if (MediaPlayer.State != MediaState.Playing && MediaPlayer.State != MediaState.Paused)
+                    MediaPlayer.Play(backgroundMusic);
             }
         }
 
@@ -129,31 +136,11 @@ namespace ProjectStella
             if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
             {
                 ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
+                MediaPlayer.Pause();
             }
             else
             {
-                // Otherwise move the player position.
-                Vector2 movement = Vector2.Zero;
-
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    movement.X--;
-
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    movement.X++;
-
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    movement.Y--;
-
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    movement.Y++;
-
-                Vector2 thumbstick = gamePadState.ThumbSticks.Left;
-
-                movement.X += thumbstick.X;
-                movement.Y -= thumbstick.Y;
-
-                if (movement.Length() > 1)
-                    movement.Normalize();
+                MediaPlayer.Resume();
             }
         }
 
