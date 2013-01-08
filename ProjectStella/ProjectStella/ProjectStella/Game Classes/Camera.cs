@@ -1,13 +1,18 @@
-﻿using System;
+﻿#region Using Statements
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+#endregion
 
 namespace ProjectStella
 {
+    /// <summary>
+    /// Our Camera class.
+    /// </summary>
     public class Camera
     {
         #region Fields
@@ -55,6 +60,8 @@ namespace ProjectStella
 
         #endregion
 
+        #region Initialize
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -77,6 +84,10 @@ namespace ProjectStella
             cameraRotation = Matrix.Identity;
         }
 
+        #endregion
+
+        #region Update
+
         /// <summary>
         /// Updates the camera
         /// </summary>
@@ -86,12 +97,12 @@ namespace ProjectStella
             switch (thirdPerson)
             {
                 case true:
-                    position = player.Position + (player.World.Backward * 200) + player.World.Up * 25;
+                    position = player.Position + player.Rotation.Backward * 1f + player.Rotation.Up * .1f;
 
                     break;
 
                 case false:
-                    position = player.Position + (player.World.Forward * 35);
+                    position = player.Position + player.Rotation.Forward * .075f;
 
                     break;
             }
@@ -102,7 +113,7 @@ namespace ProjectStella
             pitch = player.Pitch;
 
             UpdateViewMatrix();
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f, 0.1f, 500000f);
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 400f / 300f, 0.1f, 50000f);
         }
 
         /// <summary>
@@ -125,5 +136,7 @@ namespace ProjectStella
             target = position + cameraRotation.Forward;
             viewMatrix = Matrix.CreateLookAt(position, target, cameraRotation.Up);
         }
+
+        #endregion
     }
 }

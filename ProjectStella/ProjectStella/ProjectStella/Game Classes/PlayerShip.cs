@@ -15,6 +15,9 @@ using Microsoft.Xna.Framework.Media;
 
 namespace ProjectStella
 {
+    /// <summary>
+    /// This is our protaganist.
+    /// </summary>
     public class PlayerShip : Object
     {
         #region Fields
@@ -22,9 +25,12 @@ namespace ProjectStella
         private Model model;
         private Texture2D texture;
         private Vector3 position;
-
         private float yaw, pitch, roll;
         private float speed;
+        private Matrix world;
+        private Matrix rotation = Matrix.Identity;
+        private float velocity;
+
 
         public Vector3 Position
         {
@@ -42,28 +48,23 @@ namespace ProjectStella
         {
             get { return roll; }
         }
-
-        Matrix world;
-
         public Matrix World
         {
             get { return world; }
         }
-
-        Matrix rotation = Matrix.Identity;
         public Matrix Rotation
         {
             get { return rotation; }
         }
 
-        Vector3 modelOffset;
-
-        float velocity;
 
         #endregion
 
         #region Initialize
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PlayerShip(Model model, Texture2D texture, float radius)
         {
             this.model = model;
@@ -72,9 +73,12 @@ namespace ProjectStella
             yaw = 0.0f;
             pitch = 0.0f;
             roll = 0.0f;
-            speed = 50f;
+            speed = 5f;
         }
 
+        /// <summary>
+        /// Resets the player upon collision.
+        /// </summary>
         public void Reset()
         {
             position = new Vector3(0, 0, 0);
@@ -89,6 +93,9 @@ namespace ProjectStella
 
         #region Update
 
+        /// <summary>
+        /// Updates the player
+        /// </summary>
         public void Update()
         {
             GamePadState gamePad = GamePad.GetState(PlayerIndex.One);
@@ -100,6 +107,10 @@ namespace ProjectStella
             HandleInput(gamePad);
         }
 
+        /// <summary>
+        /// Handles any input that might affect the player.
+        /// </summary>
+        /// <param name="gamePad"></param>
         private void HandleInput(GamePadState gamePad)
         {
             KeyboardState keyboardState = Keyboard.GetState();
@@ -129,16 +140,13 @@ namespace ProjectStella
             
         }
 
-        void MovePlayer(Vector3 addVector)
-        {
-            position += addVector * speed;
-        }
-
-
         #endregion
 
         #region Draw
 
+        /// <summary>
+        /// Draws the 3d model
+        /// </summary>
         public void Draw(Camera camera, bool debugOn)
         {
             rotation.Forward.Normalize();
@@ -149,7 +157,7 @@ namespace ProjectStella
             rotation *= Matrix.CreateFromAxisAngle(rotation.Up, yaw);
             rotation *= Matrix.CreateFromAxisAngle(rotation.Forward, roll);
 
-            world = Matrix.CreateWorld(position, rotation.Forward, rotation.Up) * Matrix.CreateScale(1f);
+            world = Matrix.CreateScale(0.005f, 0.005f, 0.005f) * Matrix.CreateWorld(position, rotation.Forward, rotation.Up);
 
             roll = 0.0f;
             yaw = 0.0f;

@@ -7,12 +7,31 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ProjectStella
 {
+    /// <summary>
+    /// Manager of input
+    /// </summary>
     public class InputManager
     {
+        #region Fields
+
         InputState currentState;   // current frame input
         InputState lastState;      // last frame input
 
         InputState input;
+
+        public InputState CurrentState
+        {
+            get { return currentState; }
+        }
+
+        public InputState LastState
+        {
+            get { return lastState; }
+        }
+
+        #endregion
+
+        #region Initialize
 
         /// <summary>
         /// Create a new input manager
@@ -41,18 +60,9 @@ namespace ProjectStella
             input.Update();
         }
 
-        /// <summary>
-        /// Get the current input state
-        /// </summary>
-        public InputState CurrentState
-        {
-            get { return currentState; }
-        }
+        #endregion
 
-        public InputState LastState
-        {
-            get { return lastState; }
-        }
+        #region Methods
 
         /// <summary>
         /// Check if a key is down in current frame for a given player
@@ -295,5 +305,7 @@ namespace ProjectStella
             return input.CurrentGamePadStates[player].ThumbSticks.Left.X > 0.5f &&
                 input.LastGamePadStates[player].ThumbSticks.Left.X <= 0.5f;
         }
+
+        #endregion
     }
 }

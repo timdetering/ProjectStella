@@ -29,7 +29,7 @@ namespace ProjectStella
         private Matrix rotation;
         private int timeAlive;
         private bool isAlive = true;
-        private int damage = 15;
+        private int damage = 30;
 
         public Vector3 Position
         {
@@ -68,7 +68,7 @@ namespace ProjectStella
             cameraPosition = camera.Position;
             cameraUpDirection = camera.CameraRotation.Up;
 
-            speed = 500f;
+            speed = 50f;
             roll = 0f;
         }
 
@@ -108,7 +108,7 @@ namespace ProjectStella
             effect.Parameters["xCamPos"].SetValue(cameraPosition);
             effect.Parameters["xTexture"].SetValue(bulletTexture);
             effect.Parameters["xCamUp"].SetValue(cameraUpDirection);
-            effect.Parameters["xPointSpriteSize"].SetValue(10f);
+            effect.Parameters["xPointSpriteSize"].SetValue(1f);
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {

@@ -15,8 +15,16 @@ using Microsoft.Xna.Framework.Media;
 
 namespace ProjectStella
 {
+    /// <summary>
+    /// Base class for any 3d object.
+    /// </summary>
     public class Object
     {
+        #region Draw
+
+        /// <summary>
+        /// Draws 3d Model
+        /// </summary>
         virtual public void DrawModel(Model model, Matrix world, Texture2D texture, Camera camera, bool debugOn)
         {
             Matrix[] modelTransforms = new Matrix[model.Bones.Count];
@@ -36,5 +44,7 @@ namespace ProjectStella
                 mesh.Draw();
             }
         }
+
+        #endregion
     }
 }

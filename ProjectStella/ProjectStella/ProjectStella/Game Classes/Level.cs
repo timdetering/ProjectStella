@@ -72,11 +72,9 @@ namespace ProjectStella
         BoundingSphere sphere1;
 
         SoundEffect primarySound;
-        SoundEffectInstance primaryInstance;
 
         bool thirdPersonOn = false;
         bool overHeated = false;
-        bool bulletsHitting = false;
 
         float heat = 0;
         int k = 1;
@@ -95,15 +93,7 @@ namespace ProjectStella
         public Level(ScreenManager screenManager)
         {
             this.screenManager = screenManager;
-
             screenManager.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-
         }
 
         /// <summary>
@@ -140,6 +130,16 @@ namespace ProjectStella
 
             player = new PlayerShip(ship, shipTexture, 60);
 
+            CreateWorldObjects();
+
+            bullets = new List<Bullet>();
+        }
+
+        /// <summary>
+        /// Propagates the WorldObjects list.
+        /// </summary>
+        public void CreateWorldObjects()
+        {
             numOfWorldObjects = rand.Next(500, 500);
             worldObjects = new List<WorldObject>();
 
@@ -151,7 +151,7 @@ namespace ProjectStella
                 int rotX = rand.Next(1, 50);
                 int rotY = rand.Next(1, 50);
                 int rotZ = rand.Next(1, 50);
-                int moving = rand.Next(2,2 );
+                int moving = rand.Next(2, 2);
                 float scale;
                 Vector3 direction;
 
@@ -176,10 +176,6 @@ namespace ProjectStella
 
                 worldObjects.Add(new WorldObject(sphere, sphereTexture, position, scale, rotX, rotY, rotZ, direction));
             }
-
-            bullets = new List<Bullet>();
-
-            primaryInstance = primarySound.CreateInstance();
         }
 
         /// <summary>
@@ -201,20 +197,25 @@ namespace ProjectStella
         {
             gamePadState = GamePad.GetState(PlayerIndex.One);
 
+            // Handles any input from controller or keyboard.
             HandleInput(gameTime);
 
+            // Updates the player
             player.Update();
+
+            // Updates the camera
             camera.Update(player, thirdPersonOn);
 
-            immuneCounter--;
-
+            // Updates every bullet in the Bullets list.
             for(int i = 0; i < bullets.Count; i++)
                 bullets[i].Update();
                 
-
+            // Updates the WorldObjects and their collision.
             for (int i = 0; i < worldObjects.Count; i++)
             {
                 worldObjects[i].Update(gameTime);
+
+                #region Collision with PlayerShip
 
                 if (ShipCollision(ship, sphere, player.World, worldObjects[i].World))
                 {
@@ -226,12 +227,16 @@ namespace ProjectStella
                         explosion.Play();
                     }
                 }
+
+                #endregion
+
+                #region Collision with other world objects
+
                 if (k < worldObjects.Count)
                 {
-
+                    // Didn't feel like creating another method since it would be the same as the previous.
                     if (ShipCollision(sphere, sphere, worldObjects[k].World, worldObjects[i].World))
                     {
-                        frameRate = 1000;
                         worldObjects[i].ReverseDirection();
                         worldObjects[k].ReverseDirection();
                     }
@@ -239,7 +244,9 @@ namespace ProjectStella
                 }
                 else
                     k = 0;
+                #endregion
 
+                #region Collision with Bullets
 
                 for (int j = 0; j < bullets.Count; j++)
                 {
@@ -254,10 +261,7 @@ namespace ProjectStella
                         {
                             bullets[j].IsAlive = false;
                             worldObjects[i].Health -= bullets[j].Damage;
-                            bulletsHitting = true;
                         }
-                        else
-                            bulletsHitting = false;
                     }
 
                     if (bullets[j].IsAlive != true)
@@ -266,13 +270,18 @@ namespace ProjectStella
                     }
                 }
 
+                #endregion
+
                 if (worldObjects[i].IsAlive != true)
                     worldObjects.RemoveAt(i);
             }
 
+            // Handles the guns heat.
             HandleHeat();
 
             oldGamePadState = gamePadState;
+
+            #region Frame Per Second Calculations.
 
             // Measure our framerate.
             elapsedTime += gameTime.ElapsedGameTime;
@@ -282,10 +291,16 @@ namespace ProjectStella
                 elapsedTime -= TimeSpan.FromSeconds(1);
                 frameRate = frameCounter;
                 frameCounter = 0;
-            } 
+            }
 
+            #endregion
         }
 
+        #region Handlers
+
+        /// <summary>
+        /// Handles the gun's heat.
+        /// </summary>
         private void HandleHeat()
         {
             if (heat >= 100 && overHeated == false)
@@ -314,6 +329,39 @@ namespace ProjectStella
             }
         }
 
+        /// <summary>
+        /// Handles controller and keyboard input
+        /// </summary>
+        public void HandleInput(GameTime gameTime)
+        {
+            if (gamePadState.Buttons.LeftStick == ButtonState.Pressed && debugOn == false)
+                debugOn = true;
+            else if (gamePadState.Buttons.RightStick == ButtonState.Pressed && debugOn == true)
+                debugOn = false;
+
+            if (gamePadState.Triggers.Right > 0.1f && gameTime.TotalGameTime - previousShot >= fireRate && overHeated == false)
+            {
+                bullets.Add(new Bullet(player.Position, player.Rotation, bulletSprite, camera, effect, screenManager));
+                previousShot = gameTime.TotalGameTime;
+                primarySound.Play(.15f, 0, 0);
+
+                heat += 2;
+            }
+
+            if (gamePadState.DPad.Right == ButtonState.Pressed && oldGamePadState.DPad.Right == ButtonState.Pressed && thirdPersonOn == false)
+                thirdPersonOn = true;
+
+            if (gamePadState.DPad.Left == ButtonState.Pressed && oldGamePadState.DPad.Left == ButtonState.Pressed && thirdPersonOn == true)
+                thirdPersonOn = false;
+        }
+
+        #endregion
+
+        #region Collision Checkers
+
+        /// <summary>
+        /// Handles collision with players and later used for world objects.
+        /// </summary>
         private bool ShipCollision(Model model1, Model model2, Matrix world1, Matrix world2)
         {
             for (int meshIndex1 = 0; meshIndex1 < model1.Meshes.Count; meshIndex1++)
@@ -333,6 +381,9 @@ namespace ProjectStella
             return false;
         }
 
+        /// <summary>
+        /// Handles collision of bullets and world objects.
+        /// </summary>
         private bool BulletCollision(BoundingSphere sphere1, BoundingSphere sphere2)
         {
 
@@ -341,34 +392,15 @@ namespace ProjectStella
             return false;
         }
 
-        public void HandleInput(GameTime gameTime)
-        {
-            if (gamePadState.Buttons.LeftStick == ButtonState.Pressed && debugOn == false)
-                debugOn = true;
-            else if (gamePadState.Buttons.RightStick == ButtonState.Pressed && debugOn == true)
-                debugOn = false;
-
-            if (gamePadState.Triggers.Right > 0.1f && gameTime.TotalGameTime - previousShot >= fireRate && overHeated == false)
-            {
-                bullets.Add(new Bullet(player.Position + player.World.Right * 5, player.Rotation, bulletSprite, camera, effect, screenManager));
-                bullets.Add(new Bullet(player.Position + player.World.Left * 5, player.Rotation, bulletSprite, camera, effect, screenManager));
-                previousShot = gameTime.TotalGameTime;
-                primarySound.Play(.15f, 0, 0);
-
-                heat += 2;
-            }
-
-            if (gamePadState.DPad.Right == ButtonState.Pressed && oldGamePadState.DPad.Right == ButtonState.Pressed && thirdPersonOn == false)
-                thirdPersonOn = true;
-
-            if (gamePadState.DPad.Left == ButtonState.Pressed && oldGamePadState.DPad.Left == ButtonState.Pressed && thirdPersonOn == true)
-                thirdPersonOn = false;
-        }
+        #endregion
 
         #endregion
 
         #region Draw
 
+        /// <summary>
+        /// Draws all of the gameplay elements.
+        /// </summary>
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             screenManager.GraphicsDevice.Clear(Color.Black);
@@ -440,14 +472,16 @@ namespace ProjectStella
 
             if (debugOn)
                 spriteBatch.DrawString(screenManager.Font,
-                    "Debug Menu: \n"
+                    "Debug Monitor: \n"
                     + "FPS: " + frameRate.ToString() + "\n"
                     + "Asteroids: " + worldObjects.Count.ToString() + "\n"
                     + "Bullets Active: " + bullets.Count.ToString() + "\n"
                     + "Third Person On: " + thirdPersonOn.ToString() + "\n"
                     + "Heat: " + heat.ToString() + "\n"
                     + "Overheated: " + overHeated.ToString() + "\n"
-                    + "Bullets Colliding: " + bulletsHitting.ToString(), Vector2.Zero, Color.White);
+                    + "Player X: " + player.Position.X.ToString() + "\n"
+                    + "Player Y: " + player.Position.Y.ToString() + "\n"
+                    + "Player Z: " + player.Position.Z.ToString(), Vector2.Zero, Color.White);
 
 
             spriteBatch.End();

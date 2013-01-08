@@ -10,8 +10,13 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ProjectStella
 {
+    /// <summary>
+    /// Class for our lovely HiDef skybox.
+    /// </summary>
     public class Skybox
     {
+        #region Fields
+
         // The skybox cube model.
         private Model skyBox;
 
@@ -25,6 +30,10 @@ namespace ProjectStella
         // for different sized environments.
         private float scale = 5000f;
 
+        #endregion
+
+        #region Initialize
+
         /// <summary>
         /// Constructor for the skybox.
         /// </summary>
@@ -34,6 +43,10 @@ namespace ProjectStella
             skyBoxTexture = content.Load<TextureCube>("Skybox/SkyBox"); ;
             skyBoxEffect = content.Load<Effect>("Skybox/SkyboxEffect");
         }
+
+        #endregion
+
+        #region Draw
 
         /// <summary>
         /// Draws the skybox with the skybox effect.
@@ -67,5 +80,7 @@ namespace ProjectStella
                 }
             }
         }
+
+        #endregion
     }
 }

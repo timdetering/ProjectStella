@@ -12,8 +12,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 #endregion
+
 namespace ProjectStella
 {
+    /// <summary>
+    /// Class for our world objects.
+    /// </summary>
     class WorldObject : Object
     {
         #region Fields
@@ -23,8 +27,6 @@ namespace ProjectStella
         private Vector3 position;
         private Model model;
         private Texture2D texture;
-        private Vector3 velocity;
-        private Vector3 lastPosition;
         private Vector3 direction;
         bool isAlive = true;
         private int health = 100;
@@ -66,6 +68,11 @@ namespace ProjectStella
 
         #endregion
 
+        #region Initialize
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public WorldObject(Model model, Texture2D texture, Vector3 position, float scale, float rotX, float rotY, float rotZ, Vector3 direction)
         {
             this.model = model;
@@ -85,6 +92,14 @@ namespace ProjectStella
             rotation = Matrix.Identity;
         }
 
+        #endregion
+
+        #region Update
+
+        /// <summary>
+        /// Updates the WorldObject class.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
             if (health <= 0)
@@ -95,6 +110,9 @@ namespace ProjectStella
             Spin();
         }
 
+        /// <summary>
+        /// Makes our World object spin.
+        /// </summary>
         private void Spin()
         {
             rotX += spinX * 0.002f;
@@ -114,16 +132,28 @@ namespace ProjectStella
             rotZ = 0.0f;
         }
 
+        /// <summary>
+        /// Reverses the worldObject's direction if there is a collision.
+        /// </summary>
         public void ReverseDirection()
         {
             direction = direction * new Vector3(-1, -1, -1);
         }
 
+        #endregion
+
+        #region Draw
+
+        /// <summary>
+        /// Draws the WorldObject.
+        /// </summary>
         public void Draw(Camera camera, bool debugOn)
         {
-            world =  Matrix.CreateWorld(position, rotation.Forward, rotation.Up) * Matrix.CreateScale(scale);
+            world = Matrix.CreateWorld(position, rotation.Forward, rotation.Up) * Matrix.CreateScale(scale * 0.05f);
 
             DrawModel(model, world, texture, camera, debugOn);
         }
+
+        #endregion
     }
 }
